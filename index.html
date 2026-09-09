@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Both teams to score — baseline</title>
+<title>Both teams to score — model</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,10 +17,6 @@
   --muted: #77857f;
   --line: #d5dcd9;
   --line-strong: #b9c3bf;
-  --high: #2f6b4f;
-  --high-wash: #dfeae4;
-  --low: #9e4a34;
-  --low-wash: #f2e2dc;
   --flag: #8a6d1f;
   --focus: #2f6b4f;
   --r: 6px;
@@ -40,15 +36,9 @@ html, body {
 }
 
 body { padding: 0 20px 80px; }
+.wrap { max-width: 1140px; margin: 0 auto; }
 
-.wrap { max-width: 1080px; margin: 0 auto; }
-
-:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
-
-/* ---------- masthead ---------- */
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 .masthead {
   display: flex;
@@ -60,33 +50,12 @@ body { padding: 0 20px 80px; }
   border-bottom: 1px solid var(--line-strong);
 }
 
-.masthead h1 {
-  margin: 0;
-  font-size: 21px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
+.masthead h1 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.01em; }
+.masthead p { margin: 2px 0 0; color: var(--muted); font-size: 13px; max-width: 54ch; }
 
-.masthead p {
-  margin: 2px 0 0;
-  color: var(--muted);
-  font-size: 13px;
-  max-width: 52ch;
-}
+.status { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
 
-.status {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-button {
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-}
+button { font: inherit; color: inherit; cursor: pointer; }
 
 .btn {
   background: var(--surface);
@@ -96,11 +65,8 @@ button {
   font-size: 13px;
   font-weight: 500;
 }
-
 .btn:hover { border-color: var(--ink-soft); }
 .btn[disabled] { opacity: 0.5; cursor: default; }
-
-/* ---------- controls ---------- */
 
 .controls {
   display: flex;
@@ -111,12 +77,7 @@ button {
 }
 
 .control { display: flex; flex-direction: column; gap: 6px; }
-
-.control > span {
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 500;
-}
+.control > span { font-size: 12px; color: var(--muted); font-weight: 500; }
 
 .segmented {
   display: flex;
@@ -135,52 +96,20 @@ button {
   color: var(--ink-soft);
   white-space: nowrap;
 }
-
 .segmented button:last-child { border-right: 0; }
 .segmented button:hover { background: var(--surface-sunk); }
+.segmented button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 
-.segmented button[aria-pressed="true"] {
-  background: var(--ink);
-  color: #fff;
-}
-
-/* ---------- summary strip ---------- */
-
-.strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 28px;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.stat > b {
-  display: block;
-  font-size: 24px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-}
-
-.stat > span {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* ---------- fixtures ---------- */
+.strip { display: flex; flex-wrap: wrap; gap: 28px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.stat > b { display: block; font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.stat > span { font-size: 12px; color: var(--muted); }
 
 .daygroup { margin-top: 26px; }
-
-.daygroup > h2 {
-  margin: 0 0 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink-soft);
-}
+.daygroup > h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--ink-soft); }
 
 .fixture {
   display: grid;
-  grid-template-columns: 74px minmax(0, 1fr) 210px;
+  grid-template-columns: 78px minmax(0, 1fr) 310px;
   align-items: center;
   gap: 18px;
   background: var(--surface);
@@ -189,8 +118,6 @@ button {
   padding: 12px 16px;
   margin-bottom: 6px;
 }
-
-.fixture + .fixture { margin-top: -1px; }
 
 .prob {
   font-size: 27px;
@@ -201,58 +128,18 @@ button {
   padding-left: 11px;
   border-left: 4px solid var(--line-strong);
 }
+.prob small { display: block; font-size: 11px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
 
-.prob small {
-  display: block;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: var(--muted);
-}
-
-.teams {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
+.teams { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .team { min-width: 0; }
-
-.team > b {
-  display: block;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.team > span {
-  font-size: 12px;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-
+.team > b { display: block; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.team > span { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .team.away { text-align: right; }
-
-.vee {
-  font-size: 12px;
-  color: var(--line-strong);
-  flex: 0 0 auto;
-}
-
+.vee { font-size: 12px; color: var(--line-strong); flex: 0 0 auto; }
 .teams .home { flex: 1 1 50%; }
 .teams .away { flex: 1 1 50%; }
 
-.detail {
-  display: flex;
-  gap: 14px;
-  justify-content: flex-end;
-  font-size: 12px;
-  color: var(--ink-soft);
-  font-variant-numeric: tabular-nums;
-}
-
+.detail { display: flex; gap: 14px; justify-content: flex-end; font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 .detail div { text-align: right; }
 .detail b { display: block; font-weight: 600; font-size: 14px; }
 .detail span { color: var(--muted); font-size: 11px; }
@@ -268,8 +155,6 @@ button {
   vertical-align: 1px;
 }
 
-/* ---------- teams table ---------- */
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -280,28 +165,11 @@ table {
   margin-top: 20px;
 }
 
-th, td {
-  padding: 7px 10px;
-  text-align: right;
-  border-bottom: 1px solid var(--line);
-  font-size: 13px;
-}
-
-th {
-  position: sticky;
-  top: 0;
-  background: var(--surface-sunk);
-  font-weight: 600;
-  font-size: 12px;
-  color: var(--ink-soft);
-  cursor: pointer;
-}
-
+th, td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--line); font-size: 13px; }
+th { position: sticky; top: 0; background: var(--surface-sunk); font-weight: 600; font-size: 12px; color: var(--ink-soft); cursor: pointer; }
 th:first-child, td:first-child { text-align: left; }
 tbody tr:last-child td { border-bottom: 0; }
 tbody tr:hover { background: var(--surface-sunk); }
-
-/* ---------- messages ---------- */
 
 .note {
   background: var(--surface);
@@ -312,32 +180,21 @@ tbody tr:hover { background: var(--surface-sunk); }
   margin-top: 20px;
   font-size: 14px;
 }
-
 .note h3 { margin: 0 0 6px; font-size: 14px; font-weight: 600; }
 .note p { margin: 0 0 8px; color: var(--ink-soft); }
 .note p:last-child { margin-bottom: 0; }
 .note code { font-size: 12px; background: var(--surface-sunk); padding: 1px 4px; border-radius: 3px; }
 
-.empty {
-  padding: 46px 0;
-  text-align: center;
-  color: var(--muted);
-}
-
+.empty { padding: 46px 0; text-align: center; color: var(--muted); }
 .hidden { display: none !important; }
 
-@media (max-width: 760px) {
-  .fixture {
-    grid-template-columns: 64px minmax(0, 1fr);
-    row-gap: 10px;
-  }
-  .detail { grid-column: 1 / -1; justify-content: flex-start; }
+@media (max-width: 860px) {
+  .fixture { grid-template-columns: 68px minmax(0, 1fr); row-gap: 10px; }
+  .detail { grid-column: 1 / -1; justify-content: flex-start; flex-wrap: wrap; }
   .prob { font-size: 23px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 </head>
 <body>
@@ -346,7 +203,7 @@ tbody tr:hover { background: var(--surface-sunk); }
   <header class="masthead">
     <div>
       <h1>Both teams to score</h1>
-      <p>Baseline scoring and conceding rates across the Premier League, Championship, League One and League Two.</p>
+      <p>Poisson attack and defence ratings across the Premier League, Championship, League One and League Two.</p>
     </div>
     <div class="status">
       <span id="dataStatus">Loading…</span>
@@ -354,34 +211,36 @@ tbody tr:hover { background: var(--surface-sunk); }
     </div>
   </header>
 
-  <section class="controls" id="controls">
+  <section class="controls">
     <label class="control">
       <span>Divisions</span>
       <div class="segmented" id="divControl"></div>
     </label>
 
     <label class="control">
-      <span>Form window</span>
+      <span>Matches used</span>
       <div class="segmented" id="windowControl">
         <button type="button" data-window="season">This season</button>
-        <button type="button" data-window="10">Last 10</button>
-        <button type="button" data-window="20">Last 20</button>
-        <button type="button" data-window="30">Last 30</button>
+        <button type="button" data-window="180">6 months</button>
+        <button type="button" data-window="365">12 months</button>
         <button type="button" data-window="all">All loaded</button>
       </div>
     </label>
 
     <label class="control">
-      <span>Rates measured</span>
-      <div class="segmented" id="venueControl">
-        <button type="button" data-venue="venue">At this venue</button>
-        <button type="button" data-venue="all">Home and away</button>
+      <span>Recency weighting</span>
+      <div class="segmented" id="decayControl">
+        <button type="button" data-decay="0">Off</button>
+        <button type="button" data-decay="60">Fast</button>
+        <button type="button" data-decay="150">Medium</button>
+        <button type="button" data-decay="365">Slow</button>
       </div>
     </label>
 
     <label class="control">
       <span>Sort by</span>
       <div class="segmented" id="sortControl">
+        <button type="button" data-sort="model">Model</button>
         <button type="button" data-sort="product">Scoring rate</button>
         <button type="button" data-sort="blend">Past BTTS</button>
         <button type="button" data-sort="date">Kick-off</button>
@@ -392,7 +251,7 @@ tbody tr:hover { background: var(--surface-sunk); }
       <span>View</span>
       <div class="segmented" id="viewControl">
         <button type="button" data-view="fixtures">Fixtures</button>
-        <button type="button" data-view="teams">Teams</button>
+        <button type="button" data-view="teams">Ratings</button>
       </div>
     </label>
   </section>
@@ -415,25 +274,24 @@ tbody tr:hover { background: var(--surface-sunk); }
 const DIV_ORDER = ['E0', 'E1', 'E2', 'E3'];
 const DIV_SHORT = { E0: 'Premier', E1: 'Champ', E2: 'League One', E3: 'League Two' };
 const CACHE_KEY = 'btts.data.v1';
-const PREFS_KEY = 'btts.prefs.v1';
+const PREFS_KEY = 'btts.prefs.v2';
 
-let data = null;          // { matches, fixtures, seasons, fetchedAt }
-let teamIndex = null;     // Map<team, { matches, div, divisions }>
+let data = null;
+let teamIndex = null;
+let ratingsCache = { key: null, value: null };
 
 const prefs = Object.assign({
   divisions: ['E0', 'E1', 'E2', 'E3'],
-  window: '20',
-  venue: 'venue',
-  sort: 'product',
+  window: 'all',
+  decay: '150',
+  sort: 'model',
   view: 'fixtures',
   minMatches: 6,
 }, loadPrefs());
 
 function loadPrefs() {
-  try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; }
-  catch { return {}; }
+  try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; } catch { return {}; }
 }
-
 function savePrefs() {
   try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch {}
 }
@@ -442,28 +300,51 @@ function savePrefs() {
 // Loading
 // ---------------------------------------------------------------------------
 
+const CACHE_MAX_AGE = 3 * 60 * 60 * 1000; // serve from cache for three hours
+
 async function load({ force = false } = {}) {
-  if (!force) {
-    const cached = readCache();
-    if (cached) {
-      adopt(cached, true);
-      return;
-    }
+  const cached = readCache();
+
+  // Show what we have straight away so the page isn't blank, but go and
+  // refetch anyway once the copy is older than a few hours.
+  if (cached && !force) {
+    adopt(cached, true);
+    if (cacheAge(cached) < CACHE_MAX_AGE) return;
   }
 
-  setStatus('Fetching results…');
+  setStatus(cached ? 'Checking for new fixtures…' : 'Fetching results…');
 
   try {
     const res = await fetch('/.netlify/functions/data');
-    if (!res.ok) throw new Error(`Server returned ${res.status}`);
+
+    if (!res.ok) {
+      let detail = '';
+      try {
+        const body = await res.json();
+        if (body.errors && body.errors.length) {
+          detail = ' ' + body.errors.slice(0, 3)
+            .map((e) => `${e.url.split('/').slice(-2).join('/')} — ${e.message}`)
+            .join('; ');
+        }
+      } catch {}
+      throw new Error(`Server returned ${res.status}.${detail}`);
+    }
+
     const payload = await res.json();
-    if (!payload.matches || !payload.matches.length) throw new Error('No matches returned');
+
+    if (!payload.matches || !payload.matches.length) {
+      const detail = (payload.errors || []).slice(0, 3)
+        .map((e) => `${e.url.split('/').slice(-2).join('/')} — ${e.message}`)
+        .join('; ');
+      throw new Error(detail || 'The function ran but returned no matches.');
+    }
+
     writeCache(payload);
     adopt(payload, false);
   } catch (err) {
-    const cached = readCache();
+    // A background refresh that fails should leave the visible data alone.
     if (cached) {
-      adopt(cached, true);
+      if (force) adopt(cached, true);
       showFetchNote(err.message, true);
     } else {
       setStatus('No data');
@@ -472,22 +353,24 @@ async function load({ force = false } = {}) {
   }
 }
 
+function cacheAge(payload) {
+  const t = new Date(payload.fetchedAt).getTime();
+  return Number.isFinite(t) ? Date.now() - t : Infinity;
+}
+
 function readCache() {
   try {
     const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-    const payload = JSON.parse(raw);
-    const age = Date.now() - new Date(payload.fetchedAt).getTime();
-    return age < 6 * 60 * 60 * 1000 ? payload : payload; // keep stale, label it
+    return raw ? JSON.parse(raw) : null;
   } catch { return null; }
 }
-
 function writeCache(payload) {
   try { localStorage.setItem(CACHE_KEY, JSON.stringify(payload)); } catch {}
 }
 
 function adopt(payload, fromCache) {
   data = payload;
+  ratingsCache = { key: null, value: null };
   buildTeamIndex();
   const when = new Date(payload.fetchedAt);
   const label = when.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -495,15 +378,13 @@ function adopt(payload, fromCache) {
   render();
 }
 
-function setStatus(text) {
-  document.getElementById('dataStatus').textContent = text;
-}
+function setStatus(text) { document.getElementById('dataStatus').textContent = text; }
 
 function showFetchNote(message, haveCache) {
   const el = document.createElement('div');
   el.className = 'note';
   el.innerHTML = haveCache
-    ? `<h3>Showing the last saved copy</h3><p>The live fetch failed: ${escapeHtml(message)}. Numbers below may be out of date.</p>`
+    ? `<h3>Showing the last saved copy</h3><p>The live fetch failed: ${escapeHtml(message)}.</p>`
     : `<h3>Couldn't reach the data function</h3>
        <p>The fetch failed: ${escapeHtml(message)}.</p>
        <p>If you're opening this file directly, the function isn't running. Start it with <code>netlify dev</code>, or deploy the site.</p>`;
@@ -518,9 +399,7 @@ function buildTeamIndex() {
   teamIndex = new Map();
 
   const touch = (name) => {
-    if (!teamIndex.has(name)) {
-      teamIndex.set(name, { name, matches: [], divisions: new Set() });
-    }
+    if (!teamIndex.has(name)) teamIndex.set(name, { name, matches: [], divisions: new Set() });
     return teamIndex.get(name);
   };
 
@@ -529,86 +408,220 @@ function buildTeamIndex() {
     const away = touch(m.away);
     home.divisions.add(m.div);
     away.divisions.add(m.div);
-
-    home.matches.push({
-      date: m.date, div: m.div, venue: 'H',
-      opponent: m.away, gf: m.hg, ga: m.ag,
-    });
-    away.matches.push({
-      date: m.date, div: m.div, venue: 'A',
-      opponent: m.home, gf: m.ag, ga: m.hg,
-    });
+    home.matches.push({ date: m.date, div: m.div, venue: 'H', opponent: m.away, gf: m.hg, ga: m.ag });
+    away.matches.push({ date: m.date, div: m.div, venue: 'A', opponent: m.home, gf: m.ag, ga: m.hg });
   }
 
   for (const team of teamIndex.values()) {
-    team.matches.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0)); // newest first
+    team.matches.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
     team.div = team.matches.length ? team.matches[0].div : null;
-    // A team that has played in more than one division across the loaded
-    // seasons has been promoted or relegated — its older form is not
-    // like-for-like. Phase 3 adjusts for this; for now it's flagged.
     team.moved = team.divisions.size > 1;
   }
 }
 
 // ---------------------------------------------------------------------------
-// Baseline rates
+// Match window
 // ---------------------------------------------------------------------------
 
-function currentSeasonLabel() {
-  return data.seasons && data.seasons.length ? data.seasons[0] : null;
-}
-
-// Pick the matches that count for a team, given the form window and whether
-// we're measuring venue-specific rates.
-function selectMatches(team, venue) {
-  let pool = team.matches;
-
-  if (prefs.venue === 'venue' && venue) {
-    pool = pool.filter((m) => m.venue === venue);
-  }
+function windowCutoff() {
+  if (prefs.window === 'all') return null;
 
   if (prefs.window === 'season') {
-    const season = currentSeasonLabel();
-    const cutoff = seasonCutoff(season);
-    pool = cutoff ? pool.filter((m) => m.date >= cutoff) : pool;
-  } else if (prefs.window !== 'all') {
-    pool = pool.slice(0, Number(prefs.window));
+    const label = data.seasons && data.seasons[0];
+    const year = label ? Number(String(label).slice(0, 4)) : null;
+    return Number.isFinite(year) ? `${year}-07-01` : null;
   }
 
-  return pool;
+  const days = Number(prefs.window);
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d.toISOString().slice(0, 10);
 }
 
-// "2026/27" -> "2026-07-01"
-function seasonCutoff(label) {
-  if (!label) return null;
-  const year = Number(String(label).slice(0, 4));
-  return Number.isFinite(year) ? `${year}-07-01` : null;
+function matchesInWindow() {
+  const cutoff = windowCutoff();
+  return cutoff ? data.matches.filter((m) => m.date >= cutoff) : data.matches;
 }
 
-function rates(matches) {
-  const n = matches.length;
-  if (!n) {
-    return { n: 0, gf: 0, ga: 0, gfPer: null, gaPer: null, scored: null, conceded: null, btts: null };
+// ---------------------------------------------------------------------------
+// Ratings — Poisson attack/defence by iterative proportional fitting
+//
+// Model: goals are Poisson with
+//   home = mu * attack(home) * defence(away) * homeEdge
+//   away = mu * attack(away) * defence(home)
+//
+// Attack above 1 means a side scores more than the division average;
+// defence above 1 means it lets in more. Both are normalised so the
+// division averages 1, which keeps mu readable as goals per team per game.
+//
+// Divisions are fitted separately. This dataset holds no matches between
+// divisions, so a Premier League attack rating and a League Two one are not
+// on a common scale and cannot be made so from results alone.
+// ---------------------------------------------------------------------------
+
+const HOME_EDGE_INIT = 1.3;
+const ITERATIONS = 60;
+const SHRINK_K = 4; // pseudo-matches pulling a thin sample toward average
+
+function decayWeight(dateStr, halfLifeDays, today) {
+  if (!halfLifeDays) return 1;
+  const age = (today - new Date(dateStr + 'T12:00:00')) / 86400000;
+  return Math.pow(0.5, Math.max(0, age) / halfLifeDays);
+}
+
+function fitDivision(matches, halfLife) {
+  const today = new Date();
+  const rows = matches.map((m) => ({
+    home: m.home, away: m.away, hg: m.hg, ag: m.ag,
+    w: decayWeight(m.date, halfLife, today),
+  }));
+
+  let wSum = 0, goalSum = 0;
+  for (const m of rows) { wSum += m.w; goalSum += m.w * (m.hg + m.ag); }
+  if (!wSum) return null;
+
+  const mu = goalSum / (2 * wSum); // average goals per team per game
+
+  const names = new Set();
+  for (const m of rows) { names.add(m.home); names.add(m.away); }
+
+  const attack = new Map(), defence = new Map(), weight = new Map(), played = new Map();
+  for (const n of names) { attack.set(n, 1); defence.set(n, 1); weight.set(n, 0); played.set(n, 0); }
+  for (const m of rows) {
+    weight.set(m.home, weight.get(m.home) + m.w);
+    weight.set(m.away, weight.get(m.away) + m.w);
+    played.set(m.home, played.get(m.home) + 1);
+    played.set(m.away, played.get(m.away) + 1);
   }
 
-  let gf = 0, ga = 0, scored = 0, conceded = 0, btts = 0;
-  for (const m of matches) {
-    gf += m.gf;
-    ga += m.ga;
+  let homeEdge = HOME_EDGE_INIT;
+
+  for (let it = 0; it < ITERATIONS; it++) {
+    const aNum = new Map(), aDen = new Map(), bNum = new Map(), bDen = new Map();
+    for (const n of names) { aNum.set(n, 0); aDen.set(n, 0); bNum.set(n, 0); bDen.set(n, 0); }
+
+    for (const m of rows) {
+      const h = m.home, a = m.away, w = m.w;
+
+      // Attack: goals scored against the opponent's defence.
+      aNum.set(h, aNum.get(h) + w * m.hg);
+      aDen.set(h, aDen.get(h) + w * mu * defence.get(a) * homeEdge);
+      aNum.set(a, aNum.get(a) + w * m.ag);
+      aDen.set(a, aDen.get(a) + w * mu * defence.get(h));
+
+      // Defence: goals let in against the opponent's attack.
+      bNum.set(h, bNum.get(h) + w * m.ag);
+      bDen.set(h, bDen.get(h) + w * mu * attack.get(a));
+      bNum.set(a, bNum.get(a) + w * m.hg);
+      bDen.set(a, bDen.get(a) + w * mu * attack.get(h) * homeEdge);
+    }
+
+    for (const n of names) {
+      if (aDen.get(n) > 0) attack.set(n, aNum.get(n) / aDen.get(n));
+      if (bDen.get(n) > 0) defence.set(n, bNum.get(n) / bDen.get(n));
+    }
+
+    // Attack and defence are identified only up to a scale factor, so pin the
+    // attack mean at 1 and push the slack into defence.
+    let mean = 0;
+    for (const n of names) mean += attack.get(n);
+    mean /= names.size;
+    if (mean > 0) {
+      for (const n of names) {
+        attack.set(n, attack.get(n) / mean);
+        defence.set(n, defence.get(n) * mean);
+      }
+    }
+
+    let hNum = 0, hDen = 0;
+    for (const m of rows) {
+      hNum += m.w * m.hg;
+      hDen += m.w * mu * attack.get(m.home) * defence.get(m.away);
+    }
+    if (hDen > 0) homeEdge = hNum / hDen;
+  }
+
+  // Pull thin samples toward the division average. A side two games into a
+  // season shouldn't carry a rating as confident as one forty games in.
+  const teams = new Map();
+  for (const n of names) {
+    const w = weight.get(n);
+    const f = w / (w + SHRINK_K);
+    teams.set(n, {
+      attack: Math.exp(Math.log(attack.get(n)) * f),
+      defence: Math.exp(Math.log(defence.get(n)) * f),
+      weight: w,
+      played: played.get(n),
+    });
+  }
+
+  return { mu, homeEdge, teams };
+}
+
+function ratings() {
+  const key = `${prefs.window}|${prefs.decay}`;
+  if (ratingsCache.key === key) return ratingsCache.value;
+
+  const halfLife = Number(prefs.decay) || 0;
+  const pool = matchesInWindow();
+  const byDiv = {};
+
+  for (const div of DIV_ORDER) {
+    const ms = pool.filter((m) => m.div === div);
+    byDiv[div] = ms.length ? fitDivision(ms, halfLife) : null;
+  }
+
+  ratingsCache = { key, value: byDiv };
+  return byDiv;
+}
+
+// ---------------------------------------------------------------------------
+// Probabilities
+// ---------------------------------------------------------------------------
+
+// Independent Poissons: both sides score when neither is kept out.
+function pBtts(lh, la) {
+  return (1 - Math.exp(-lh)) * (1 - Math.exp(-la));
+}
+
+// The sum of two independent Poissons is Poisson, so totals need no matrix.
+function pOver(lh, la, line) {
+  const L = lh + la;
+  let cdf = 0, term = Math.exp(-L);
+  for (let k = 0; k <= line; k++) {
+    cdf += term;
+    term *= L / (k + 1);
+  }
+  return 1 - cdf;
+}
+
+// Strip the bookmaker's margin by normalising the two implied probabilities.
+function marketOver25(fx) {
+  if (!fx.over25 || !fx.under25) return null;
+  const o = 1 / fx.over25, u = 1 / fx.under25;
+  const total = o + u;
+  return total > 0 ? o / total : null;
+}
+
+// ---------------------------------------------------------------------------
+// Naive baselines, kept as the benchmark the model has to beat
+// ---------------------------------------------------------------------------
+
+function venueRates(team, venue) {
+  const cutoff = windowCutoff();
+  let pool = team.matches.filter((m) => m.venue === venue);
+  if (cutoff) pool = pool.filter((m) => m.date >= cutoff);
+
+  const n = pool.length;
+  if (!n) return { n: 0, scored: null, conceded: null, btts: null };
+
+  let scored = 0, conceded = 0, btts = 0;
+  for (const m of pool) {
     if (m.gf > 0) scored++;
     if (m.ga > 0) conceded++;
     if (m.gf > 0 && m.ga > 0) btts++;
   }
-
-  return {
-    n,
-    gf, ga,
-    gfPer: gf / n,
-    gaPer: ga / n,
-    scored: scored / n,
-    conceded: conceded / n,
-    btts: btts / n,
-  };
+  return { n, scored: scored / n, conceded: conceded / n, btts: btts / n };
 }
 
 // ---------------------------------------------------------------------------
@@ -618,32 +631,44 @@ function rates(matches) {
 function scoreFixture(fx) {
   const home = teamIndex.get(fx.home);
   const away = teamIndex.get(fx.away);
-
   if (!home || !away) {
     return { fx, unmatched: [!home && fx.home, !away && fx.away].filter(Boolean) };
   }
 
-  const homeForm = rates(selectMatches(home, 'H'));
-  const awayForm = rates(selectMatches(away, 'A'));
+  const homeForm = venueRates(home, 'H');
+  const awayForm = venueRates(away, 'A');
 
-  if (!homeForm.n || !awayForm.n) {
-    return { fx, home, away, homeForm, awayForm, thin: true };
+  const product = homeForm.scored !== null && awayForm.scored !== null
+    ? homeForm.scored * awayForm.scored : null;
+  const blend = homeForm.btts !== null && awayForm.btts !== null
+    ? (homeForm.btts + awayForm.btts) / 2 : null;
+
+  const fit = ratings()[fx.div];
+  let model = null, lh = null, la = null, modelOver = null, rated = false;
+
+  if (fit) {
+    const h = fit.teams.get(fx.home);
+    const a = fit.teams.get(fx.away);
+    // A side with no matches in this division sits at the average until it
+    // has played some — better than refusing to price the fixture at all.
+    const ha = h ? h.attack : 1, hd = h ? h.defence : 1;
+    const aa = a ? a.attack : 1, ad = a ? a.defence : 1;
+    rated = Boolean(h && a);
+
+    lh = fit.mu * ha * ad * fit.homeEdge;
+    la = fit.mu * aa * hd;
+    model = pBtts(lh, la);
+    modelOver = pOver(lh, la, 2);
   }
 
-  // Naive baseline 1 — treat the two teams as independent. P(home scores)
-  // multiplied by P(away scores), each measured at the relevant venue.
-  const product = homeForm.scored * awayForm.scored;
-
-  // Naive baseline 2 — what actually happened in these teams' own matches.
-  const blend = (homeForm.btts + awayForm.btts) / 2;
-
-  const expGoals = homeForm.gfPer + awayForm.gaPer > 0
-    ? (homeForm.gfPer + awayForm.gaPer) / 2 + (awayForm.gfPer + homeForm.gaPer) / 2
-    : null;
-
+  const market = marketOver25(fx);
   const thin = homeForm.n < prefs.minMatches || awayForm.n < prefs.minMatches;
 
-  return { fx, home, away, homeForm, awayForm, product, blend, expGoals, thin };
+  return {
+    fx, home, away, homeForm, awayForm,
+    product, blend, model, lh, la, modelOver, market, rated, thin,
+    calib: model !== null && market !== null ? modelOver - market : null,
+  };
 }
 
 function upcomingFixtures() {
@@ -662,7 +687,6 @@ function render() {
   if (!data) return;
 
   const rows = upcomingFixtures().map(scoreFixture);
-
   renderStrip(rows);
 
   if (prefs.view === 'fixtures') {
@@ -677,33 +701,40 @@ function render() {
 }
 
 function renderStrip(rows) {
-  const scored = rows.filter((r) => r.product !== undefined);
-  const avg = scored.length
-    ? scored.reduce((a, r) => a + r.product, 0) / scored.length
-    : null;
-  const thin = rows.filter((r) => r.thin).length;
-  const unmatched = rows.filter((r) => r.unmatched).length;
+  const fits = ratings();
 
-  const strip = document.getElementById('strip');
-  strip.innerHTML = `
+  const priced = rows.filter((r) => r.model !== null && r.model !== undefined);
+  const avgModel = priced.length ? priced.reduce((a, r) => a + r.model, 0) / priced.length : null;
+
+  const calibs = rows.map((r) => r.calib).filter((c) => c !== null && c !== undefined);
+  const bias = calibs.length ? calibs.reduce((a, c) => a + c, 0) / calibs.length : null;
+
+  const edges = DIV_ORDER
+    .filter((d) => prefs.divisions.includes(d) && fits[d])
+    .map((d) => fits[d].homeEdge);
+  const avgEdge = edges.length ? edges.reduce((a, e) => a + e, 0) / edges.length : null;
+
+  const rated = DIV_ORDER
+    .filter((d) => prefs.divisions.includes(d) && fits[d])
+    .reduce((a, d) => a + fits[d].teams.size, 0);
+
+  document.getElementById('strip').innerHTML = `
     <div class="stat"><b>${rows.length}</b><span>fixtures ahead</span></div>
-    <div class="stat"><b>${avg === null ? '—' : pct(avg)}</b><span>average scoring-rate estimate</span></div>
-    <div class="stat"><b>${teamIndex.size}</b><span>teams indexed</span></div>
-    <div class="stat"><b>${thin}</b><span>flagged for thin form</span></div>
-    ${unmatched ? `<div class="stat"><b>${unmatched}</b><span>fixtures with unknown teams</span></div>` : ''}
-  `;
+    <div class="stat"><b>${avgModel === null ? '—' : pct(avgModel)}</b><span>average model chance</span></div>
+    <div class="stat"><b>${avgEdge === null ? '—' : '×' + avgEdge.toFixed(2)}</b><span>home scoring edge</span></div>
+    <div class="stat"><b>${bias === null ? '—' : (bias >= 0 ? '+' : '') + (bias * 100).toFixed(1) + 'pt'}</b><span>model vs market on over 2.5</span></div>
+    <div class="stat"><b>${rated}</b><span>teams rated</span></div>`;
 }
 
 function renderFixtures(rows) {
   const view = document.getElementById('fixturesView');
 
   if (!rows.length) {
-    view.innerHTML = `<div class="empty">No upcoming fixtures in the selected divisions. The source file usually fills up midweek.</div>`;
+    view.innerHTML = `<div class="empty">No upcoming fixtures in the selected divisions. The source file fills up as the weekend approaches.</div>`;
     return;
   }
 
   const sorted = rows.slice().sort(compareRows);
-
   let html = '';
 
   if (prefs.sort === 'date') {
@@ -716,7 +747,12 @@ function renderFixtures(rows) {
       html += `<section class="daygroup"><h2>${escapeHtml(longDate(date))}</h2>${group.map(fixtureRow).join('')}</section>`;
     }
   } else {
-    html = `<section class="daygroup"><h2>Ranked by ${prefs.sort === 'product' ? 'estimated chance both teams score' : 'how often both teams have scored'}</h2>${sorted.map(fixtureRow).join('')}</section>`;
+    const heading = {
+      model: 'Ranked by the model',
+      product: 'Ranked by scoring rate',
+      blend: 'Ranked by how often both teams have scored',
+    }[prefs.sort];
+    html = `<section class="daygroup"><h2>${heading}</h2>${sorted.map(fixtureRow).join('')}</section>`;
   }
 
   view.innerHTML = html;
@@ -727,14 +763,14 @@ function compareRows(a, b) {
     if (a.fx.date !== b.fx.date) return a.fx.date < b.fx.date ? -1 : 1;
     return (a.fx.time || '').localeCompare(b.fx.time || '');
   }
-  const key = prefs.sort === 'blend' ? 'blend' : 'product';
-  const av = a[key] === undefined ? -1 : a[key];
-  const bv = b[key] === undefined ? -1 : b[key];
+  const key = prefs.sort === 'blend' ? 'blend' : prefs.sort === 'product' ? 'product' : 'model';
+  const av = a[key] === null || a[key] === undefined ? -1 : a[key];
+  const bv = b[key] === null || b[key] === undefined ? -1 : b[key];
   return bv - av;
 }
 
 function fixtureRow(r) {
-  const { fx } = r;
+  const fx = r.fx;
 
   if (r.unmatched) {
     return `<article class="fixture">
@@ -748,89 +784,94 @@ function fixtureRow(r) {
     </article>`;
   }
 
-  const value = prefs.sort === 'blend' ? r.blend : r.product;
-  const colour = scaleColour(value);
+  const headline = prefs.sort === 'blend' ? r.blend : prefs.sort === 'product' ? r.product : r.model;
+  const headlineLabel = prefs.sort === 'blend' ? 'past BTTS'
+    : prefs.sort === 'product' ? 'scoring rate' : 'both score';
 
   return `<article class="fixture">
-    <div class="prob" style="border-left-color:${colour}">
-      ${pct(value)}
-      <small>${prefs.sort === 'blend' ? 'past BTTS' : 'both score'}</small>
+    <div class="prob" style="border-left-color:${scaleColour(headline)}">
+      ${pct(headline)}
+      <small>${headlineLabel}</small>
     </div>
     <div class="teams">
       <div class="team home">
         <b>${escapeHtml(fx.home)}${r.home.moved ? '<span class="flag">moved</span>' : ''}</b>
-        <span>scores in ${pct(r.homeForm.scored)} at home · concedes in ${pct(r.homeForm.conceded)} · ${r.homeForm.n} games</span>
+        <span>${ratingLine(fx.div, fx.home)}</span>
       </div>
       <div class="vee">v</div>
       <div class="team away">
         <b>${r.away.moved ? '<span class="flag">moved</span>' : ''}${escapeHtml(fx.away)}</b>
-        <span>${r.awayForm.n} games · concedes in ${pct(r.awayForm.conceded)} · scores in ${pct(r.awayForm.scored)} away</span>
+        <span>${ratingLine(fx.div, fx.away)}</span>
       </div>
     </div>
     <div class="detail">
+      <div><b>${r.lh === null ? '—' : r.lh.toFixed(2) + ' – ' + r.la.toFixed(2)}</b><span>goals expected</span></div>
       <div><b>${pct(r.blend)}</b><span>past BTTS</span></div>
-      <div><b>${r.expGoals === null ? '—' : r.expGoals.toFixed(2)}</b><span>goals expected</span></div>
-      <div><b>${fx.over25 ? fx.over25.toFixed(2) : '—'}</b><span>over 2.5</span></div>
+      <div><b>${r.modelOver === null ? '—' : pct(r.modelOver)}${r.market === null ? '' : ' / ' + pct(r.market)}</b><span>over 2.5 model / market</span></div>
       <div><b>${shortDate(fx.date)}${fx.time ? ' ' + fx.time : ''}</b><span>${DIV_SHORT[fx.div] || fx.div}${r.thin ? ' · thin' : ''}</span></div>
     </div>
   </article>`;
 }
 
-let teamSort = { key: 'btts', dir: -1 };
+function ratingLine(div, name) {
+  const fit = ratings()[div];
+  const t = fit && fit.teams.get(name);
+  if (!t) return 'no matches in this division';
+  return `attack ${t.attack.toFixed(2)} · defence ${t.defence.toFixed(2)} · ${t.played} games`;
+}
+
+let teamSort = { key: 'goals', dir: -1 };
 
 function renderTeams() {
-  const teams = [...teamIndex.values()]
-    .filter((t) => prefs.divisions.includes(t.div))
-    .map((t) => {
-      const all = rates(selectMatches(t, null));
-      const home = rates(t.matches.filter((m) => m.venue === 'H').slice(0, windowSize()));
-      const away = rates(t.matches.filter((m) => m.venue === 'A').slice(0, windowSize()));
-      return { team: t, all, home, away };
-    })
-    .filter((row) => row.all.n > 0);
+  const fits = ratings();
+  const rows = [];
 
-  teams.sort((a, b) => {
-    const get = (r) => {
-      switch (teamSort.key) {
-        case 'name': return r.team.name;
-        case 'div': return r.team.div;
-        case 'n': return r.all.n;
-        case 'gf': return r.all.gfPer;
-        case 'ga': return r.all.gaPer;
-        case 'scored': return r.all.scored;
-        case 'conceded': return r.all.conceded;
-        case 'homeBtts': return r.home.btts ?? -1;
-        case 'awayBtts': return r.away.btts ?? -1;
-        default: return r.all.btts;
-      }
-    };
-    const av = get(a), bv = get(b);
+  for (const div of DIV_ORDER) {
+    if (!prefs.divisions.includes(div) || !fits[div]) continue;
+    const fit = fits[div];
+    for (const [name, t] of fit.teams) {
+      const indexed = teamIndex.get(name);
+      rows.push({
+        name, div,
+        played: t.played,
+        attack: t.attack,
+        defence: t.defence,
+        scoresHome: fit.mu * t.attack * fit.homeEdge,
+        scoresAway: fit.mu * t.attack,
+        concedes: fit.mu * t.defence,
+        goals: fit.mu * (t.attack + t.defence),
+        moved: indexed ? indexed.moved : false,
+      });
+    }
+  }
+
+  rows.sort((a, b) => {
+    const av = a[teamSort.key], bv = b[teamSort.key];
     if (typeof av === 'string') return av.localeCompare(bv) * teamSort.dir * -1;
     return (av - bv) * teamSort.dir;
   });
 
   const cols = [
-    ['name', 'Team'], ['div', 'Division'], ['n', 'Games'],
-    ['gf', 'Scored/g'], ['ga', 'Let in/g'],
-    ['scored', 'Scores in'], ['conceded', 'Concedes in'],
-    ['btts', 'Both scored'], ['homeBtts', 'At home'], ['awayBtts', 'Away'],
+    ['name', 'Team'], ['div', 'Division'], ['played', 'Games'],
+    ['attack', 'Attack'], ['defence', 'Defence'],
+    ['scoresHome', 'Scores at home'], ['scoresAway', 'Scores away'],
+    ['concedes', 'Lets in'], ['goals', 'Goals in its games'],
   ];
 
   document.getElementById('teamsView').innerHTML = `
     <table>
       <thead><tr>${cols.map(([k, l]) => `<th data-key="${k}">${l}</th>`).join('')}</tr></thead>
       <tbody>
-        ${teams.map((r) => `<tr>
-          <td>${escapeHtml(r.team.name)}${r.team.moved ? '<span class="flag">moved</span>' : ''}</td>
-          <td>${DIV_SHORT[r.team.div] || r.team.div}</td>
-          <td>${r.all.n}</td>
-          <td>${r.all.gfPer.toFixed(2)}</td>
-          <td>${r.all.gaPer.toFixed(2)}</td>
-          <td>${pct(r.all.scored)}</td>
-          <td>${pct(r.all.conceded)}</td>
-          <td>${pct(r.all.btts)}</td>
-          <td>${pct(r.home.btts)}</td>
-          <td>${pct(r.away.btts)}</td>
+        ${rows.map((r) => `<tr>
+          <td>${escapeHtml(r.name)}${r.moved ? '<span class="flag">moved</span>' : ''}</td>
+          <td>${DIV_SHORT[r.div]}</td>
+          <td>${r.played}</td>
+          <td>${r.attack.toFixed(2)}</td>
+          <td>${r.defence.toFixed(2)}</td>
+          <td>${r.scoresHome.toFixed(2)}</td>
+          <td>${r.scoresAway.toFixed(2)}</td>
+          <td>${r.concedes.toFixed(2)}</td>
+          <td>${r.goals.toFixed(2)}</td>
         </tr>`).join('')}
       </tbody>
     </table>`;
@@ -846,38 +887,27 @@ function renderTeams() {
   });
 }
 
-function windowSize() {
-  if (prefs.window === 'all' || prefs.window === 'season') return 999;
-  return Number(prefs.window);
-}
-
 // ---------------------------------------------------------------------------
 // Controls
 // ---------------------------------------------------------------------------
 
 function buildDivControl() {
   const el = document.getElementById('divControl');
-  el.innerHTML = DIV_ORDER
-    .map((d) => `<button type="button" data-div="${d}">${DIV_SHORT[d]}</button>`)
-    .join('');
+  el.innerHTML = DIV_ORDER.map((d) => `<button type="button" data-div="${d}">${DIV_SHORT[d]}</button>`).join('');
   el.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
     const div = btn.dataset.div;
     const i = prefs.divisions.indexOf(div);
-    if (i >= 0) {
-      if (prefs.divisions.length > 1) prefs.divisions.splice(i, 1);
-    } else {
-      prefs.divisions.push(div);
-    }
+    if (i >= 0) { if (prefs.divisions.length > 1) prefs.divisions.splice(i, 1); }
+    else prefs.divisions.push(div);
     savePrefs();
     render();
   });
 }
 
 function bindSegment(id, key) {
-  const el = document.getElementById(id);
-  el.addEventListener('click', (e) => {
+  document.getElementById(id).addEventListener('click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
     prefs[key] = btn.dataset[key];
@@ -890,7 +920,7 @@ function syncControls() {
   document.querySelectorAll('#divControl button').forEach((b) => {
     b.setAttribute('aria-pressed', prefs.divisions.includes(b.dataset.div));
   });
-  [['windowControl', 'window'], ['venueControl', 'venue'], ['sortControl', 'sort'], ['viewControl', 'view']]
+  [['windowControl', 'window'], ['decayControl', 'decay'], ['sortControl', 'sort'], ['viewControl', 'view']]
     .forEach(([id, key]) => {
       document.querySelectorAll(`#${id} button`).forEach((b) => {
         b.setAttribute('aria-pressed', b.dataset[key] === prefs[key]);
@@ -908,30 +938,19 @@ function pct(v) {
 
 function scaleColour(v) {
   if (v === null || v === undefined) return 'var(--line)';
-  // 35% reads as low, 70% reads as high; anything between shades across.
   const t = Math.max(0, Math.min(1, (v - 0.35) / 0.35));
-  const from = [158, 74, 52];
-  const to = [47, 107, 79];
-  const mix = from.map((c, i) => Math.round(c + (to[i] - c) * t));
-  return `rgb(${mix.join(',')})`;
+  const from = [158, 74, 52], to = [47, 107, 79];
+  return `rgb(${from.map((c, i) => Math.round(c + (to[i] - c) * t)).join(',')})`;
 }
 
 function longDate(iso) {
-  return new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', {
-    weekday: 'long', day: 'numeric', month: 'long',
-  });
+  return new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
 }
-
 function shortDate(iso) {
-  return new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', {
-    day: 'numeric', month: 'short',
-  });
+  return new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
-
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-  ));
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 // ---------------------------------------------------------------------------
@@ -940,7 +959,7 @@ function escapeHtml(s) {
 
 buildDivControl();
 bindSegment('windowControl', 'window');
-bindSegment('venueControl', 'venue');
+bindSegment('decayControl', 'decay');
 bindSegment('sortControl', 'sort');
 bindSegment('viewControl', 'view');
 
