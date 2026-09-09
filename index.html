@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Both teams to score — baseline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ground: #edf0ef;
+  --surface: #ffffff;
+  --surface-sunk: #f5f7f6;
+  --ink: #14201d;
+  --ink-soft: #475651;
+  --muted: #77857f;
+  --line: #d5dcd9;
+  --line-strong: #b9c3bf;
+  --high: #2f6b4f;
+  --high-wash: #dfeae4;
+  --low: #9e4a34;
+  --low-wash: #f2e2dc;
+  --flag: #8a6d1f;
+  --focus: #2f6b4f;
+  --r: 6px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+body { padding: 0 20px 80px; }
+
+.wrap { max-width: 1080px; margin: 0 auto; }
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ---------- masthead ---------- */
+
+.masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 28px 0 16px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.masthead p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 52ch;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.btn {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.btn:hover { border-color: var(--ink-soft); }
+.btn[disabled] { opacity: 0.5; cursor: default; }
+
+/* ---------- controls ---------- */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.control { display: flex; flex-direction: column; gap: 6px; }
+
+.control > span {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.segmented {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.segmented button {
+  background: none;
+  border: 0;
+  border-right: 1px solid var(--line);
+  padding: 5px 11px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.segmented button:last-child { border-right: 0; }
+.segmented button:hover { background: var(--surface-sunk); }
+
+.segmented button[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+
+/* ---------- summary strip ---------- */
+
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.stat > b {
+  display: block;
+  font-size: 24px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.stat > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------- fixtures ---------- */
+
+.daygroup { margin-top: 26px; }
+
+.daygroup > h2 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.fixture {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr) 210px;
+  align-items: center;
+  gap: 18px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 12px 16px;
+  margin-bottom: 6px;
+}
+
+.fixture + .fixture { margin-top: -1px; }
+
+.prob {
+  font-size: 27px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  padding-left: 11px;
+  border-left: 4px solid var(--line-strong);
+}
+
+.prob small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.teams {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.team { min-width: 0; }
+
+.team > b {
+  display: block;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.team > span {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.team.away { text-align: right; }
+
+.vee {
+  font-size: 12px;
+  color: var(--line-strong);
+  flex: 0 0 auto;
+}
+
+.teams .home { flex: 1 1 50%; }
+.teams .away { flex: 1 1 50%; }
+
+.detail {
+  display: flex;
+  gap: 14px;
+  justify-content: flex-end;
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.detail div { text-align: right; }
+.detail b { display: block; font-weight: 600; font-size: 14px; }
+.detail span { color: var(--muted); font-size: 11px; }
+
+.flag {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 11px;
+  color: var(--flag);
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 0 4px;
+  vertical-align: 1px;
+}
+
+/* ---------- teams table ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  font-variant-numeric: tabular-nums;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 7px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-sunk);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+th:first-child, td:first-child { text-align: left; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--surface-sunk); }
+
+/* ---------- messages ---------- */
+
+.note {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--flag);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.note h3 { margin: 0 0 6px; font-size: 14px; font-weight: 600; }
+.note p { margin: 0 0 8px; color: var(--ink-soft); }
+.note p:last-child { margin-bottom: 0; }
+.note code { font-size: 12px; background: var(--surface-sunk); padding: 1px 4px; border-radius: 3px; }
+
+.empty {
+  padding: 46px 0;
+  text-align: center;
+  color: var(--muted);
+}
+
+.hidden { display: none !important; }
+
+@media (max-width: 760px) {
+  .fixture {
+    grid-template-columns: 64px minmax(0, 1fr);
+    row-gap: 10px;
+  }
+  .detail { grid-column: 1 / -1; justify-content: flex-start; }
+  .prob { font-size: 23px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div>
+      <h1>Both teams to score</h1>
+      <p>Baseline scoring and conceding rates across the Premier League, Championship, League One and League Two.</p>
+    </div>
+    <div class="status">
+      <span id="dataStatus">Loading…</span>
+      <button class="btn" id="refreshBtn">Refresh data</button>
+    </div>
+  </header>
+
+  <section class="controls" id="controls">
+    <label class="control">
+      <span>Divisions</span>
+      <div class="segmented" id="divControl"></div>
+    </label>
+
+    <label class="control">
+      <span>Form window</span>
+      <div class="segmented" id="windowControl">
+        <button type="button" data-window="season">This season</button>
+        <button type="button" data-window="10">Last 10</button>
+        <button type="button" data-window="20">Last 20</button>
+        <button type="button" data-window="30">Last 30</button>
+        <button type="button" data-window="all">All loaded</button>
+      </div>
+    </label>
+
+    <label class="control">
+      <span>Rates measured</span>
+      <div class="segmented" id="venueControl">
+        <button type="button" data-venue="venue">At this venue</button>
+        <button type="button" data-venue="all">Home and away</button>
+      </div>
+    </label>
+
+    <label class="control">
+      <span>Sort by</span>
+      <div class="segmented" id="sortControl">
+        <button type="button" data-sort="product">Scoring rate</button>
+        <button type="button" data-sort="blend">Past BTTS</button>
+        <button type="button" data-sort="date">Kick-off</button>
+      </div>
+    </label>
+
+    <label class="control">
+      <span>View</span>
+      <div class="segmented" id="viewControl">
+        <button type="button" data-view="fixtures">Fixtures</button>
+        <button type="button" data-view="teams">Teams</button>
+      </div>
+    </label>
+  </section>
+
+  <section class="strip" id="strip"></section>
+
+  <div id="messages"></div>
+  <div id="fixturesView"></div>
+  <div id="teamsView" class="hidden"></div>
+
+</div>
+
+<script>
+'use strict';
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+
+const DIV_ORDER = ['E0', 'E1', 'E2', 'E3'];
+const DIV_SHORT = { E0: 'Premier', E1: 'Champ', E2: 'League One', E3: 'League Two' };
+const CACHE_KEY = 'btts.data.v1';
+const PREFS_KEY = 'btts.prefs.v1';
+
+let data = null;          // { matches, fixtures, seasons, fetchedAt }
+let teamIndex = null;     // Map<team, { matches, div, divisions }>
+
+const prefs = Object.assign({
+  divisions: ['E0', 'E1', 'E2', 'E3'],
+  window: '20',
+  venue: 'venue',
+  sort: 'product',
+  view: 'fixtures',
+  minMatches: 6,
+}, loadPrefs());
+
+function loadPrefs() {
+  try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function savePrefs() {
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch {}
+}
+
+// ---------------------------------------------------------------------------
+// Loading
+// ---------------------------------------------------------------------------
+
+async function load({ force = false } = {}) {
+  if (!force) {
+    const cached = readCache();
+    if (cached) {
+      adopt(cached, true);
+      return;
+    }
+  }
+
+  setStatus('Fetching results…');
+
+  try {
+    const res = await fetch('/.netlify/functions/data');
+    if (!res.ok) throw new Error(`Server returned ${res.status}`);
+    const payload = await res.json();
+    if (!payload.matches || !payload.matches.length) throw new Error('No matches returned');
+    writeCache(payload);
+    adopt(payload, false);
+  } catch (err) {
+    const cached = readCache();
+    if (cached) {
+      adopt(cached, true);
+      showFetchNote(err.message, true);
+    } else {
+      setStatus('No data');
+      showFetchNote(err.message, false);
+    }
+  }
+}
+
+function readCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const payload = JSON.parse(raw);
+    const age = Date.now() - new Date(payload.fetchedAt).getTime();
+    return age < 6 * 60 * 60 * 1000 ? payload : payload; // keep stale, label it
+  } catch { return null; }
+}
+
+function writeCache(payload) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(payload)); } catch {}
+}
+
+function adopt(payload, fromCache) {
+  data = payload;
+  buildTeamIndex();
+  const when = new Date(payload.fetchedAt);
+  const label = when.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  setStatus(`${payload.matches.length} matches · ${fromCache ? 'cached ' : ''}${label}`);
+  render();
+}
+
+function setStatus(text) {
+  document.getElementById('dataStatus').textContent = text;
+}
+
+function showFetchNote(message, haveCache) {
+  const el = document.createElement('div');
+  el.className = 'note';
+  el.innerHTML = haveCache
+    ? `<h3>Showing the last saved copy</h3><p>The live fetch failed: ${escapeHtml(message)}. Numbers below may be out of date.</p>`
+    : `<h3>Couldn't reach the data function</h3>
+       <p>The fetch failed: ${escapeHtml(message)}.</p>
+       <p>If you're opening this file directly, the function isn't running. Start it with <code>netlify dev</code>, or deploy the site.</p>`;
+  document.getElementById('messages').appendChild(el);
+}
+
+// ---------------------------------------------------------------------------
+// Team index
+// ---------------------------------------------------------------------------
+
+function buildTeamIndex() {
+  teamIndex = new Map();
+
+  const touch = (name) => {
+    if (!teamIndex.has(name)) {
+      teamIndex.set(name, { name, matches: [], divisions: new Set() });
+    }
+    return teamIndex.get(name);
+  };
+
+  for (const m of data.matches) {
+    const home = touch(m.home);
+    const away = touch(m.away);
+    home.divisions.add(m.div);
+    away.divisions.add(m.div);
+
+    home.matches.push({
+      date: m.date, div: m.div, venue: 'H',
+      opponent: m.away, gf: m.hg, ga: m.ag,
+    });
+    away.matches.push({
+      date: m.date, div: m.div, venue: 'A',
+      opponent: m.home, gf: m.ag, ga: m.hg,
+    });
+  }
+
+  for (const team of teamIndex.values()) {
+    team.matches.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0)); // newest first
+    team.div = team.matches.length ? team.matches[0].div : null;
+    // A team that has played in more than one division across the loaded
+    // seasons has been promoted or relegated — its older form is not
+    // like-for-like. Phase 3 adjusts for this; for now it's flagged.
+    team.moved = team.divisions.size > 1;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Baseline rates
+// ---------------------------------------------------------------------------
+
+function currentSeasonLabel() {
+  return data.seasons && data.seasons.length ? data.seasons[0] : null;
+}
+
+// Pick the matches that count for a team, given the form window and whether
+// we're measuring venue-specific rates.
+function selectMatches(team, venue) {
+  let pool = team.matches;
+
+  if (prefs.venue === 'venue' && venue) {
+    pool = pool.filter((m) => m.venue === venue);
+  }
+
+  if (prefs.window === 'season') {
+    const season = currentSeasonLabel();
+    const cutoff = seasonCutoff(season);
+    pool = cutoff ? pool.filter((m) => m.date >= cutoff) : pool;
+  } else if (prefs.window !== 'all') {
+    pool = pool.slice(0, Number(prefs.window));
+  }
+
+  return pool;
+}
+
+// "2026/27" -> "2026-07-01"
+function seasonCutoff(label) {
+  if (!label) return null;
+  const year = Number(String(label).slice(0, 4));
+  return Number.isFinite(year) ? `${year}-07-01` : null;
+}
+
+function rates(matches) {
+  const n = matches.length;
+  if (!n) {
+    return { n: 0, gf: 0, ga: 0, gfPer: null, gaPer: null, scored: null, conceded: null, btts: null };
+  }
+
+  let gf = 0, ga = 0, scored = 0, conceded = 0, btts = 0;
+  for (const m of matches) {
+    gf += m.gf;
+    ga += m.ga;
+    if (m.gf > 0) scored++;
+    if (m.ga > 0) conceded++;
+    if (m.gf > 0 && m.ga > 0) btts++;
+  }
+
+  return {
+    n,
+    gf, ga,
+    gfPer: gf / n,
+    gaPer: ga / n,
+    scored: scored / n,
+    conceded: conceded / n,
+    btts: btts / n,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Fixture scoring
+// ---------------------------------------------------------------------------
+
+function scoreFixture(fx) {
+  const home = teamIndex.get(fx.home);
+  const away = teamIndex.get(fx.away);
+
+  if (!home || !away) {
+    return { fx, unmatched: [!home && fx.home, !away && fx.away].filter(Boolean) };
+  }
+
+  const homeForm = rates(selectMatches(home, 'H'));
+  const awayForm = rates(selectMatches(away, 'A'));
+
+  if (!homeForm.n || !awayForm.n) {
+    return { fx, home, away, homeForm, awayForm, thin: true };
+  }
+
+  // Naive baseline 1 — treat the two teams as independent. P(home scores)
+  // multiplied by P(away scores), each measured at the relevant venue.
+  const product = homeForm.scored * awayForm.scored;
+
+  // Naive baseline 2 — what actually happened in these teams' own matches.
+  const blend = (homeForm.btts + awayForm.btts) / 2;
+
+  const expGoals = homeForm.gfPer + awayForm.gaPer > 0
+    ? (homeForm.gfPer + awayForm.gaPer) / 2 + (awayForm.gfPer + homeForm.gaPer) / 2
+    : null;
+
+  const thin = homeForm.n < prefs.minMatches || awayForm.n < prefs.minMatches;
+
+  return { fx, home, away, homeForm, awayForm, product, blend, expGoals, thin };
+}
+
+function upcomingFixtures() {
+  const today = new Date().toISOString().slice(0, 10);
+  return data.fixtures
+    .filter((f) => prefs.divisions.includes(f.div))
+    .filter((f) => f.date >= today);
+}
+
+// ---------------------------------------------------------------------------
+// Rendering
+// ---------------------------------------------------------------------------
+
+function render() {
+  syncControls();
+  if (!data) return;
+
+  const rows = upcomingFixtures().map(scoreFixture);
+
+  renderStrip(rows);
+
+  if (prefs.view === 'fixtures') {
+    document.getElementById('fixturesView').classList.remove('hidden');
+    document.getElementById('teamsView').classList.add('hidden');
+    renderFixtures(rows);
+  } else {
+    document.getElementById('fixturesView').classList.add('hidden');
+    document.getElementById('teamsView').classList.remove('hidden');
+    renderTeams();
+  }
+}
+
+function renderStrip(rows) {
+  const scored = rows.filter((r) => r.product !== undefined);
+  const avg = scored.length
+    ? scored.reduce((a, r) => a + r.product, 0) / scored.length
+    : null;
+  const thin = rows.filter((r) => r.thin).length;
+  const unmatched = rows.filter((r) => r.unmatched).length;
+
+  const strip = document.getElementById('strip');
+  strip.innerHTML = `
+    <div class="stat"><b>${rows.length}</b><span>fixtures ahead</span></div>
+    <div class="stat"><b>${avg === null ? '—' : pct(avg)}</b><span>average scoring-rate estimate</span></div>
+    <div class="stat"><b>${teamIndex.size}</b><span>teams indexed</span></div>
+    <div class="stat"><b>${thin}</b><span>flagged for thin form</span></div>
+    ${unmatched ? `<div class="stat"><b>${unmatched}</b><span>fixtures with unknown teams</span></div>` : ''}
+  `;
+}
+
+function renderFixtures(rows) {
+  const view = document.getElementById('fixturesView');
+
+  if (!rows.length) {
+    view.innerHTML = `<div class="empty">No upcoming fixtures in the selected divisions. The source file usually fills up midweek.</div>`;
+    return;
+  }
+
+  const sorted = rows.slice().sort(compareRows);
+
+  let html = '';
+
+  if (prefs.sort === 'date') {
+    const byDay = new Map();
+    for (const r of sorted) {
+      if (!byDay.has(r.fx.date)) byDay.set(r.fx.date, []);
+      byDay.get(r.fx.date).push(r);
+    }
+    for (const [date, group] of byDay) {
+      html += `<section class="daygroup"><h2>${escapeHtml(longDate(date))}</h2>${group.map(fixtureRow).join('')}</section>`;
+    }
+  } else {
+    html = `<section class="daygroup"><h2>Ranked by ${prefs.sort === 'product' ? 'estimated chance both teams score' : 'how often both teams have scored'}</h2>${sorted.map(fixtureRow).join('')}</section>`;
+  }
+
+  view.innerHTML = html;
+}
+
+function compareRows(a, b) {
+  if (prefs.sort === 'date') {
+    if (a.fx.date !== b.fx.date) return a.fx.date < b.fx.date ? -1 : 1;
+    return (a.fx.time || '').localeCompare(b.fx.time || '');
+  }
+  const key = prefs.sort === 'blend' ? 'blend' : 'product';
+  const av = a[key] === undefined ? -1 : a[key];
+  const bv = b[key] === undefined ? -1 : b[key];
+  return bv - av;
+}
+
+function fixtureRow(r) {
+  const { fx } = r;
+
+  if (r.unmatched) {
+    return `<article class="fixture">
+      <div class="prob" style="border-left-color: var(--line)">—<small>no data</small></div>
+      <div class="teams">
+        <div class="team home"><b>${escapeHtml(fx.home)}</b><span>${DIV_SHORT[fx.div] || fx.div}</span></div>
+        <div class="vee">v</div>
+        <div class="team away"><b>${escapeHtml(fx.away)}</b><span>${shortDate(fx.date)}</span></div>
+      </div>
+      <div class="detail"><div><b>?</b><span>${escapeHtml(r.unmatched.join(', '))} not in results</span></div></div>
+    </article>`;
+  }
+
+  const value = prefs.sort === 'blend' ? r.blend : r.product;
+  const colour = scaleColour(value);
+
+  return `<article class="fixture">
+    <div class="prob" style="border-left-color:${colour}">
+      ${pct(value)}
+      <small>${prefs.sort === 'blend' ? 'past BTTS' : 'both score'}</small>
+    </div>
+    <div class="teams">
+      <div class="team home">
+        <b>${escapeHtml(fx.home)}${r.home.moved ? '<span class="flag">moved</span>' : ''}</b>
+        <span>scores in ${pct(r.homeForm.scored)} at home · concedes in ${pct(r.homeForm.conceded)} · ${r.homeForm.n} games</span>
+      </div>
+      <div class="vee">v</div>
+      <div class="team away">
+        <b>${r.away.moved ? '<span class="flag">moved</span>' : ''}${escapeHtml(fx.away)}</b>
+        <span>${r.awayForm.n} games · concedes in ${pct(r.awayForm.conceded)} · scores in ${pct(r.awayForm.scored)} away</span>
+      </div>
+    </div>
+    <div class="detail">
+      <div><b>${pct(r.blend)}</b><span>past BTTS</span></div>
+      <div><b>${r.expGoals === null ? '—' : r.expGoals.toFixed(2)}</b><span>goals expected</span></div>
+      <div><b>${fx.over25 ? fx.over25.toFixed(2) : '—'}</b><span>over 2.5</span></div>
+      <div><b>${shortDate(fx.date)}${fx.time ? ' ' + fx.time : ''}</b><span>${DIV_SHORT[fx.div] || fx.div}${r.thin ? ' · thin' : ''}</span></div>
+    </div>
+  </article>`;
+}
+
+let teamSort = { key: 'btts', dir: -1 };
+
+function renderTeams() {
+  const teams = [...teamIndex.values()]
+    .filter((t) => prefs.divisions.includes(t.div))
+    .map((t) => {
+      const all = rates(selectMatches(t, null));
+      const home = rates(t.matches.filter((m) => m.venue === 'H').slice(0, windowSize()));
+      const away = rates(t.matches.filter((m) => m.venue === 'A').slice(0, windowSize()));
+      return { team: t, all, home, away };
+    })
+    .filter((row) => row.all.n > 0);
+
+  teams.sort((a, b) => {
+    const get = (r) => {
+      switch (teamSort.key) {
+        case 'name': return r.team.name;
+        case 'div': return r.team.div;
+        case 'n': return r.all.n;
+        case 'gf': return r.all.gfPer;
+        case 'ga': return r.all.gaPer;
+        case 'scored': return r.all.scored;
+        case 'conceded': return r.all.conceded;
+        case 'homeBtts': return r.home.btts ?? -1;
+        case 'awayBtts': return r.away.btts ?? -1;
+        default: return r.all.btts;
+      }
+    };
+    const av = get(a), bv = get(b);
+    if (typeof av === 'string') return av.localeCompare(bv) * teamSort.dir * -1;
+    return (av - bv) * teamSort.dir;
+  });
+
+  const cols = [
+    ['name', 'Team'], ['div', 'Division'], ['n', 'Games'],
+    ['gf', 'Scored/g'], ['ga', 'Let in/g'],
+    ['scored', 'Scores in'], ['conceded', 'Concedes in'],
+    ['btts', 'Both scored'], ['homeBtts', 'At home'], ['awayBtts', 'Away'],
+  ];
+
+  document.getElementById('teamsView').innerHTML = `
+    <table>
+      <thead><tr>${cols.map(([k, l]) => `<th data-key="${k}">${l}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${teams.map((r) => `<tr>
+          <td>${escapeHtml(r.team.name)}${r.team.moved ? '<span class="flag">moved</span>' : ''}</td>
+          <td>${DIV_SHORT[r.team.div] || r.team.div}</td>
+          <td>${r.all.n}</td>
+          <td>${r.all.gfPer.toFixed(2)}</td>
+          <td>${r.all.gaPer.toFixed(2)}</td>
+          <td>${pct(r.all.scored)}</td>
+          <td>${pct(r.all.conceded)}</td>
+          <td>${pct(r.all.btts)}</td>
+          <td>${pct(r.home.btts)}</td>
+          <td>${pct(r.away.btts)}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+
+  document.querySelectorAll('#teamsView th').forEach((th) => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.key;
+      teamSort = key === teamSort.key
+        ? { key, dir: teamSort.dir * -1 }
+        : { key, dir: key === 'name' || key === 'div' ? 1 : -1 };
+      renderTeams();
+    });
+  });
+}
+
+function windowSize() {
+  if (prefs.window === 'all' || prefs.window === 'season') return 999;
+  return Number(prefs.window);
+}
+
+// ---------------------------------------------------------------------------
+// Controls
+// ---------------------------------------------------------------------------
+
+function buildDivControl() {
+  const el = document.getElementById('divControl');
+  el.innerHTML = DIV_ORDER
+    .map((d) => `<button type="button" data-div="${d}">${DIV_SHORT[d]}</button>`)
+    .join('');
+  el.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const div = btn.dataset.div;
+    const i = prefs.divisions.indexOf(div);
+    if (i >= 0) {
+      if (prefs.divisions.length > 1) prefs.divisions.splice(i, 1);
+    } else {
+      prefs.divisions.push(div);
+    }
+    savePrefs();
+    render();
+  });
+}
+
+function bindSegment(id, key) {
+  const el = document.getElementById(id);
+  el.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    prefs[key] = btn.dataset[key];
+    savePrefs();
+    render();
+  });
+}
+
+function syncControls() {
+  document.querySelectorAll('#divControl button').forEach((b) => {
+    b.setAttribute('aria-pressed', prefs.divisions.includes(b.dataset.div));
+  });
+  [['windowControl', 'window'], ['venueControl', 'venue'], ['sortControl', 'sort'], ['viewControl', 'view']]
+    .forEach(([id, key]) => {
+      document.querySelectorAll(`#${id} button`).forEach((b) => {
+        b.setAttribute('aria-pressed', b.dataset[key] === prefs[key]);
+      });
+    });
+}
+
+// ---------------------------------------------------------------------------
+// Formatting
+// ---------------------------------------------------------------------------
+
+function pct(v) {
+  return v === null || v === undefined ? '—' : Math.round(v * 100) + '%';
+}
+
+function scaleColour(v) {
+  if (v === null || v === undefined) return 'var(--line)';
+  // 35% reads as low, 70% reads as high; anything between shades across.
+  const t = Math.max(0, Math.min(1, (v - 0.35) / 0.35));
+  const from = [158, 74, 52];
+  const to = [47, 107, 79];
+  const mix = from.map((c, i) => Math.round(c + (to[i] - c) * t));
+  return `rgb(${mix.join(',')})`;
+}
+
+function longDate(iso) {
+  return new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', {
+    weekday: 'long', day: 'numeric', month: 'long',
+  });
+}
+
+function shortDate(iso) {
+  return new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'short',
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
+// ---------------------------------------------------------------------------
+// Boot
+// ---------------------------------------------------------------------------
+
+buildDivControl();
+bindSegment('windowControl', 'window');
+bindSegment('venueControl', 'venue');
+bindSegment('sortControl', 'sort');
+bindSegment('viewControl', 'view');
+
+document.getElementById('refreshBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled = true;
+  document.getElementById('messages').innerHTML = '';
+  await load({ force: true });
+  btn.disabled = false;
+});
+
+syncControls();
+load();
+</script>
+</body>
+</html>
