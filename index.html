@@ -3,23 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Both teams to score — model</title>
+<title>Both teams to score</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ground: #edf0ef;
-  --surface: #ffffff;
-  --surface-sunk: #f5f7f6;
-  --ink: #14201d;
-  --ink-soft: #475651;
-  --muted: #77857f;
-  --line: #d5dcd9;
-  --line-strong: #b9c3bf;
-  --flag: #8a6d1f;
-  --focus: #2f6b4f;
-  --r: 6px;
+  --ground: #0b110f;
+  --panel: #0f1714;
+  --panel-hi: #141e1a;
+  --line: #1e2a25;
+  --line-hi: #2c3a34;
+  --ink: #f2f4f2;
+  --ink-soft: #c8d0cc;
+  --muted: #7d8a84;
+  --dim: #4d5c56;
+  --lit: #eda100;
+  --balanced: #1baf7a;
+  --lopsided: #eb6834;
+  --r: 8px;
+  --bar-max: 3;
 }
 
 * { box-sizing: border-box; }
@@ -36,9 +39,8 @@ html, body {
 }
 
 body { padding: 0 20px 80px; }
-.wrap { max-width: 1140px; margin: 0 auto; }
-
-:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 1080px; margin: 0 auto; }
+:focus-visible { outline: 2px solid var(--lit); outline-offset: 2px; }
 
 .masthead {
   display: flex;
@@ -46,155 +48,125 @@ body { padding: 0 20px 80px; }
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  padding: 28px 0 16px;
-  border-bottom: 1px solid var(--line-strong);
+  padding: 30px 0 18px;
 }
 
-.masthead h1 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.01em; }
-.masthead p { margin: 2px 0 0; color: var(--muted); font-size: 13px; max-width: 54ch; }
-
-.status { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+.masthead h1 { margin: 0; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+.masthead p { margin: 3px 0 0; color: var(--muted); font-size: 13px; max-width: 56ch; }
+.status { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--muted); }
 
 button { font: inherit; color: inherit; cursor: pointer; }
 
 .btn {
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
+  background: var(--panel);
+  border: 1px solid var(--line-hi);
   border-radius: var(--r);
   padding: 6px 12px;
   font-size: 13px;
-  font-weight: 500;
+  color: var(--ink-soft);
 }
-.btn:hover { border-color: var(--ink-soft); }
-.btn[disabled] { opacity: 0.5; cursor: default; }
+.btn:hover { border-color: var(--dim); color: var(--ink); }
+.btn[disabled] { opacity: 0.45; cursor: default; }
 
 .controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 22px;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--line);
+  gap: 20px;
+  padding: 16px;
+  background: var(--panel);
+  border-radius: var(--r);
 }
 
 .control { display: flex; flex-direction: column; gap: 6px; }
-.control > span { font-size: 12px; color: var(--muted); font-weight: 500; }
+.control > span { font-size: 11px; color: var(--muted); }
 
-.segmented {
-  display: flex;
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r);
-  overflow: hidden;
-}
-
+.segmented { display: flex; background: var(--ground); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
 .segmented button {
   background: none;
   border: 0;
   border-right: 1px solid var(--line);
-  padding: 5px 11px;
-  font-size: 13px;
-  color: var(--ink-soft);
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--muted);
   white-space: nowrap;
 }
 .segmented button:last-child { border-right: 0; }
-.segmented button:hover { background: var(--surface-sunk); }
-.segmented button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.segmented button:hover { color: var(--ink-soft); }
+.segmented button[aria-pressed="true"] { background: var(--panel-hi); color: var(--ink); }
 
-.strip { display: flex; flex-wrap: wrap; gap: 28px; padding: 18px 0; border-bottom: 1px solid var(--line); }
-.stat > b { display: block; font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.stat > span { font-size: 12px; color: var(--muted); }
+.strip { display: flex; flex-wrap: wrap; gap: 30px; padding: 20px 4px; }
+.stat > b { display: block; font-size: 23px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.stat > span { font-size: 11px; color: var(--muted); }
 
-.daygroup { margin-top: 26px; }
-.daygroup > h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+.board { background: var(--panel); border-radius: var(--r); padding: 4px 16px 10px; }
+.boardhead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
 
 .fixture {
   display: grid;
-  grid-template-columns: 78px minmax(0, 1fr) 310px;
+  grid-template-columns: 78px minmax(0, 1fr) 190px;
+  gap: 16px;
   align-items: center;
-  gap: 18px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  padding: 12px 16px;
-  margin-bottom: 6px;
+  padding: 11px 0;
+  border-top: 1px solid var(--line);
 }
 
-.prob {
-  font-size: 27px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  padding-left: 11px;
-  border-left: 4px solid var(--line-strong);
-}
-.prob small { display: block; font-size: 11px; font-weight: 400; letter-spacing: 0; color: var(--muted); }
+.fixture:hover { background: var(--panel-hi); }
 
-.teams { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.team { min-width: 0; }
-.team > b { display: block; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.team > span { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.team.away { text-align: right; }
-.vee { font-size: 12px; color: var(--line-strong); flex: 0 0 auto; }
-.teams .home { flex: 1 1 50%; }
-.teams .away { flex: 1 1 50%; }
+.pcell > b { display: block; font-size: 25px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1; }
+.pcell > span { font-size: 11px; color: var(--muted); }
 
-.detail { display: flex; gap: 14px; justify-content: flex-end; font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
-.detail div { text-align: right; }
-.detail b { display: block; font-weight: 600; font-size: 14px; }
-.detail span { color: var(--muted); font-size: 11px; }
+.names { font-size: 14px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.names em { font-style: normal; color: var(--dim); padding: 0 3px; }
 
-.flag {
-  display: inline-block;
-  margin-left: 6px;
-  font-size: 11px;
-  color: var(--flag);
-  border: 1px solid currentColor;
-  border-radius: 3px;
-  padding: 0 4px;
-  vertical-align: 1px;
-}
+.forms { display: flex; justify-content: space-between; margin-top: 6px; gap: 12px; }
+.form { display: flex; gap: 3px; }
+.form i { display: block; width: 14px; height: 3px; border-radius: 1px; background: var(--line-hi); }
+.form i.on { background: var(--lit); }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  font-variant-numeric: tabular-nums;
-  margin-top: 20px;
-}
+.bars { display: flex; align-items: center; height: 20px; }
+.bars .side { flex: 1; display: flex; }
+.bars .side.l { justify-content: flex-end; }
+.bars .axis { width: 1px; height: 18px; background: var(--dim); flex: 0 0 auto; }
+.bars span.b { height: 9px; display: block; }
+.bars .l span.b { border-radius: 2px 0 0 2px; }
+.bars .r span.b { border-radius: 0 2px 2px 0; }
 
+.lambdas { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.meta { text-align: right; font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+.flag { color: var(--lit); font-size: 10px; padding-left: 5px; }
+
+table { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: var(--r); font-variant-numeric: tabular-nums; margin-top: 8px; }
 th, td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--line); font-size: 13px; }
-th { position: sticky; top: 0; background: var(--surface-sunk); font-weight: 600; font-size: 12px; color: var(--ink-soft); cursor: pointer; }
+th { position: sticky; top: 0; background: var(--panel-hi); font-weight: 500; font-size: 11px; color: var(--muted); cursor: pointer; }
 th:first-child, td:first-child { text-align: left; }
+td { color: var(--ink-soft); }
 tbody tr:last-child td { border-bottom: 0; }
-tbody tr:hover { background: var(--surface-sunk); }
+tbody tr:hover td { color: var(--ink); }
 
-.note {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--flag);
-  border-radius: var(--r);
-  padding: 14px 16px;
-  margin-top: 20px;
-  font-size: 14px;
-}
-.note h3 { margin: 0 0 6px; font-size: 14px; font-weight: 600; }
+.note { background: var(--panel); border-left: 3px solid var(--lit); border-radius: 0 var(--r) var(--r) 0; padding: 14px 16px; margin-top: 18px; font-size: 14px; }
+.note h3 { margin: 0 0 6px; font-size: 14px; font-weight: 500; }
 .note p { margin: 0 0 8px; color: var(--ink-soft); }
 .note p:last-child { margin-bottom: 0; }
-.note code { font-size: 12px; background: var(--surface-sunk); padding: 1px 4px; border-radius: 3px; }
+.note code { font-size: 12px; background: var(--ground); padding: 1px 5px; border-radius: 3px; }
 
-.empty { padding: 46px 0; text-align: center; color: var(--muted); }
+.empty { padding: 50px 0; text-align: center; color: var(--muted); }
 .hidden { display: none !important; }
 
-@media (max-width: 860px) {
-  .fixture { grid-template-columns: 68px minmax(0, 1fr); row-gap: 10px; }
-  .detail { grid-column: 1 / -1; justify-content: flex-start; flex-wrap: wrap; }
-  .prob { font-size: 23px; }
+@media (max-width: 820px) {
+  .fixture { grid-template-columns: 66px minmax(0, 1fr); row-gap: 10px; }
+  .barcell { grid-column: 1 / -1; }
+  .pcell > b { font-size: 22px; }
 }
 
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
@@ -212,13 +184,8 @@ tbody tr:hover { background: var(--surface-sunk); }
   </header>
 
   <section class="controls">
-    <label class="control">
-      <span>Divisions</span>
-      <div class="segmented" id="divControl"></div>
-    </label>
-
-    <label class="control">
-      <span>Matches used</span>
+    <label class="control"><span>Divisions</span><div class="segmented" id="divControl"></div></label>
+    <label class="control"><span>Matches used</span>
       <div class="segmented" id="windowControl">
         <button type="button" data-window="season">This season</button>
         <button type="button" data-window="180">6 months</button>
@@ -226,9 +193,7 @@ tbody tr:hover { background: var(--surface-sunk); }
         <button type="button" data-window="all">All loaded</button>
       </div>
     </label>
-
-    <label class="control">
-      <span>Recency weighting</span>
+    <label class="control"><span>Recency weighting</span>
       <div class="segmented" id="decayControl">
         <button type="button" data-decay="0">Off</button>
         <button type="button" data-decay="60">Fast</button>
@@ -236,19 +201,15 @@ tbody tr:hover { background: var(--surface-sunk); }
         <button type="button" data-decay="365">Slow</button>
       </div>
     </label>
-
-    <label class="control">
-      <span>Sort by</span>
+    <label class="control"><span>Sort by</span>
       <div class="segmented" id="sortControl">
         <button type="button" data-sort="model">Model</button>
-        <button type="button" data-sort="product">Scoring rate</button>
+        <button type="button" data-sort="balance">Balance</button>
         <button type="button" data-sort="blend">Past BTTS</button>
         <button type="button" data-sort="date">Kick-off</button>
       </div>
     </label>
-
-    <label class="control">
-      <span>View</span>
+    <label class="control"><span>View</span>
       <div class="segmented" id="viewControl">
         <button type="button" data-view="fixtures">Fixtures</button>
         <button type="button" data-view="teams">Ratings</button>
@@ -267,14 +228,13 @@ tbody tr:hover { background: var(--surface-sunk); }
 <script>
 'use strict';
 
-// ---------------------------------------------------------------------------
-// State
-// ---------------------------------------------------------------------------
-
 const DIV_ORDER = ['E0', 'E1', 'E2', 'E3'];
 const DIV_SHORT = { E0: 'Premier', E1: 'Champ', E2: 'League One', E3: 'League Two' };
 const CACHE_KEY = 'btts.data.v1';
-const PREFS_KEY = 'btts.prefs.v2';
+const PREFS_KEY = 'btts.prefs.v3';
+const CACHE_MAX_AGE = 3 * 60 * 60 * 1000;
+const FORM_MARKS = 6;
+const BAR_MAX = 3;
 
 let data = null;
 let teamIndex = null;
@@ -300,13 +260,9 @@ function savePrefs() {
 // Loading
 // ---------------------------------------------------------------------------
 
-const CACHE_MAX_AGE = 3 * 60 * 60 * 1000; // serve from cache for three hours
-
 async function load({ force = false } = {}) {
   const cached = readCache();
 
-  // Show what we have straight away so the page isn't blank, but go and
-  // refetch anyway once the copy is older than a few hours.
   if (cached && !force) {
     adopt(cached, true);
     if (cacheAge(cached) < CACHE_MAX_AGE) return;
@@ -323,18 +279,18 @@ async function load({ force = false } = {}) {
         const body = await res.json();
         if (body.errors && body.errors.length) {
           detail = ' ' + body.errors.slice(0, 3)
-            .map((e) => `${e.url.split('/').slice(-2).join('/')} — ${e.message}`)
+            .map((e) => e.url.split('/').slice(-2).join('/') + ' — ' + e.message)
             .join('; ');
         }
       } catch {}
-      throw new Error(`Server returned ${res.status}.${detail}`);
+      throw new Error('Server returned ' + res.status + '.' + detail);
     }
 
     const payload = await res.json();
 
     if (!payload.matches || !payload.matches.length) {
       const detail = (payload.errors || []).slice(0, 3)
-        .map((e) => `${e.url.split('/').slice(-2).join('/')} — ${e.message}`)
+        .map((e) => e.url.split('/').slice(-2).join('/') + ' — ' + e.message)
         .join('; ');
       throw new Error(detail || 'The function ran but returned no matches.');
     }
@@ -342,7 +298,6 @@ async function load({ force = false } = {}) {
     writeCache(payload);
     adopt(payload, false);
   } catch (err) {
-    // A background refresh that fails should leave the visible data alone.
     if (cached) {
       if (force) adopt(cached, true);
       showFetchNote(err.message, true);
@@ -357,12 +312,8 @@ function cacheAge(payload) {
   const t = new Date(payload.fetchedAt).getTime();
   return Number.isFinite(t) ? Date.now() - t : Infinity;
 }
-
 function readCache() {
-  try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
+  try { const raw = localStorage.getItem(CACHE_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; }
 }
 function writeCache(payload) {
   try { localStorage.setItem(CACHE_KEY, JSON.stringify(payload)); } catch {}
@@ -374,7 +325,7 @@ function adopt(payload, fromCache) {
   buildTeamIndex();
   const when = new Date(payload.fetchedAt);
   const label = when.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-  setStatus(`${payload.matches.length} matches · ${fromCache ? 'cached ' : ''}${label}`);
+  setStatus(payload.matches.length + ' matches · ' + (fromCache ? 'cached ' : '') + label);
   render();
 }
 
@@ -384,10 +335,9 @@ function showFetchNote(message, haveCache) {
   const el = document.createElement('div');
   el.className = 'note';
   el.innerHTML = haveCache
-    ? `<h3>Showing the last saved copy</h3><p>The live fetch failed: ${escapeHtml(message)}.</p>`
-    : `<h3>Couldn't reach the data function</h3>
-       <p>The fetch failed: ${escapeHtml(message)}.</p>
-       <p>If you're opening this file directly, the function isn't running. Start it with <code>netlify dev</code>, or deploy the site.</p>`;
+    ? '<h3>Showing the last saved copy</h3><p>The live fetch failed: ' + escapeHtml(message) + '.</p>'
+    : '<h3>Could not reach the data function</h3><p>The fetch failed: ' + escapeHtml(message) + '.</p>'
+      + '<p>If you are opening this file directly, the function is not running. Start it with <code>netlify dev</code>, or deploy the site.</p>';
   document.getElementById('messages').appendChild(el);
 }
 
@@ -408,8 +358,8 @@ function buildTeamIndex() {
     const away = touch(m.away);
     home.divisions.add(m.div);
     away.divisions.add(m.div);
-    home.matches.push({ date: m.date, div: m.div, venue: 'H', opponent: m.away, gf: m.hg, ga: m.ag });
-    away.matches.push({ date: m.date, div: m.div, venue: 'A', opponent: m.home, gf: m.ag, ga: m.hg });
+    home.matches.push({ date: m.date, div: m.div, venue: 'H', gf: m.hg, ga: m.ag });
+    away.matches.push({ date: m.date, div: m.div, venue: 'A', gf: m.ag, ga: m.hg });
   }
 
   for (const team of teamIndex.values()) {
@@ -425,16 +375,13 @@ function buildTeamIndex() {
 
 function windowCutoff() {
   if (prefs.window === 'all') return null;
-
   if (prefs.window === 'season') {
     const label = data.seasons && data.seasons[0];
     const year = label ? Number(String(label).slice(0, 4)) : null;
-    return Number.isFinite(year) ? `${year}-07-01` : null;
+    return Number.isFinite(year) ? year + '-07-01' : null;
   }
-
-  const days = Number(prefs.window);
   const d = new Date();
-  d.setDate(d.getDate() - days);
+  d.setDate(d.getDate() - Number(prefs.window));
   return d.toISOString().slice(0, 10);
 }
 
@@ -446,22 +393,19 @@ function matchesInWindow() {
 // ---------------------------------------------------------------------------
 // Ratings — Poisson attack/defence by iterative proportional fitting
 //
-// Model: goals are Poisson with
-//   home = mu * attack(home) * defence(away) * homeEdge
-//   away = mu * attack(away) * defence(home)
+//   home goals ~ Poisson(mu * attack(home) * defence(away) * homeEdge)
+//   away goals ~ Poisson(mu * attack(away) * defence(home))
 //
-// Attack above 1 means a side scores more than the division average;
-// defence above 1 means it lets in more. Both are normalised so the
-// division averages 1, which keeps mu readable as goals per team per game.
+// Attack above 1 means a side scores more than its division average; defence
+// above 1 means it lets in more. Both normalise to a division mean of 1.
 //
-// Divisions are fitted separately. This dataset holds no matches between
-// divisions, so a Premier League attack rating and a League Two one are not
-// on a common scale and cannot be made so from results alone.
+// Divisions are fitted separately — no matches run between them, so their
+// ratings are not on a common scale and cannot be made so from results alone.
 // ---------------------------------------------------------------------------
 
 const HOME_EDGE_INIT = 1.3;
 const ITERATIONS = 60;
-const SHRINK_K = 4; // pseudo-matches pulling a thin sample toward average
+const SHRINK_K = 4;
 
 function decayWeight(dateStr, halfLifeDays, today) {
   if (!halfLifeDays) return 1;
@@ -480,7 +424,7 @@ function fitDivision(matches, halfLife) {
   for (const m of rows) { wSum += m.w; goalSum += m.w * (m.hg + m.ag); }
   if (!wSum) return null;
 
-  const mu = goalSum / (2 * wSum); // average goals per team per game
+  const mu = goalSum / (2 * wSum);
 
   const names = new Set();
   for (const m of rows) { names.add(m.home); names.add(m.away); }
@@ -502,14 +446,10 @@ function fitDivision(matches, halfLife) {
 
     for (const m of rows) {
       const h = m.home, a = m.away, w = m.w;
-
-      // Attack: goals scored against the opponent's defence.
       aNum.set(h, aNum.get(h) + w * m.hg);
       aDen.set(h, aDen.get(h) + w * mu * defence.get(a) * homeEdge);
       aNum.set(a, aNum.get(a) + w * m.ag);
       aDen.set(a, aDen.get(a) + w * mu * defence.get(h));
-
-      // Defence: goals let in against the opponent's attack.
       bNum.set(h, bNum.get(h) + w * m.ag);
       bDen.set(h, bDen.get(h) + w * mu * attack.get(a));
       bNum.set(a, bNum.get(a) + w * m.hg);
@@ -521,8 +461,6 @@ function fitDivision(matches, halfLife) {
       if (bDen.get(n) > 0) defence.set(n, bNum.get(n) / bDen.get(n));
     }
 
-    // Attack and defence are identified only up to a scale factor, so pin the
-    // attack mean at 1 and push the slack into defence.
     let mean = 0;
     for (const n of names) mean += attack.get(n);
     mean /= names.size;
@@ -541,8 +479,6 @@ function fitDivision(matches, halfLife) {
     if (hDen > 0) homeEdge = hNum / hDen;
   }
 
-  // Pull thin samples toward the division average. A side two games into a
-  // season shouldn't carry a rating as confident as one forty games in.
   const teams = new Map();
   for (const n of names) {
     const w = weight.get(n);
@@ -550,7 +486,6 @@ function fitDivision(matches, halfLife) {
     teams.set(n, {
       attack: Math.exp(Math.log(attack.get(n)) * f),
       defence: Math.exp(Math.log(defence.get(n)) * f),
-      weight: w,
       played: played.get(n),
     });
   }
@@ -559,13 +494,12 @@ function fitDivision(matches, halfLife) {
 }
 
 function ratings() {
-  const key = `${prefs.window}|${prefs.decay}`;
+  const key = prefs.window + '|' + prefs.decay;
   if (ratingsCache.key === key) return ratingsCache.value;
 
   const halfLife = Number(prefs.decay) || 0;
   const pool = matchesInWindow();
   const byDiv = {};
-
   for (const div of DIV_ORDER) {
     const ms = pool.filter((m) => m.div === div);
     byDiv[div] = ms.length ? fitDivision(ms, halfLife) : null;
@@ -579,32 +513,23 @@ function ratings() {
 // Probabilities
 // ---------------------------------------------------------------------------
 
-// Independent Poissons: both sides score when neither is kept out.
-function pBtts(lh, la) {
-  return (1 - Math.exp(-lh)) * (1 - Math.exp(-la));
-}
+function pBtts(lh, la) { return (1 - Math.exp(-lh)) * (1 - Math.exp(-la)); }
 
-// The sum of two independent Poissons is Poisson, so totals need no matrix.
 function pOver(lh, la, line) {
   const L = lh + la;
   let cdf = 0, term = Math.exp(-L);
-  for (let k = 0; k <= line; k++) {
-    cdf += term;
-    term *= L / (k + 1);
-  }
+  for (let k = 0; k <= line; k++) { cdf += term; term *= L / (k + 1); }
   return 1 - cdf;
 }
 
-// Strip the bookmaker's margin by normalising the two implied probabilities.
 function marketOver25(fx) {
   if (!fx.over25 || !fx.under25) return null;
   const o = 1 / fx.over25, u = 1 / fx.under25;
-  const total = o + u;
-  return total > 0 ? o / total : null;
+  return o + u > 0 ? o / (o + u) : null;
 }
 
 // ---------------------------------------------------------------------------
-// Naive baselines, kept as the benchmark the model has to beat
+// Baselines
 // ---------------------------------------------------------------------------
 
 function venueRates(team, venue) {
@@ -613,15 +538,11 @@ function venueRates(team, venue) {
   if (cutoff) pool = pool.filter((m) => m.date >= cutoff);
 
   const n = pool.length;
-  if (!n) return { n: 0, scored: null, conceded: null, btts: null };
+  if (!n) return { n: 0, btts: null };
 
-  let scored = 0, conceded = 0, btts = 0;
-  for (const m of pool) {
-    if (m.gf > 0) scored++;
-    if (m.ga > 0) conceded++;
-    if (m.gf > 0 && m.ga > 0) btts++;
-  }
-  return { n, scored: scored / n, conceded: conceded / n, btts: btts / n };
+  let btts = 0;
+  for (const m of pool) if (m.gf > 0 && m.ga > 0) btts++;
+  return { n, btts: btts / n };
 }
 
 // ---------------------------------------------------------------------------
@@ -637,36 +558,32 @@ function scoreFixture(fx) {
 
   const homeForm = venueRates(home, 'H');
   const awayForm = venueRates(away, 'A');
-
-  const product = homeForm.scored !== null && awayForm.scored !== null
-    ? homeForm.scored * awayForm.scored : null;
   const blend = homeForm.btts !== null && awayForm.btts !== null
     ? (homeForm.btts + awayForm.btts) / 2 : null;
 
   const fit = ratings()[fx.div];
-  let model = null, lh = null, la = null, modelOver = null, rated = false;
+  let model = null, lh = null, la = null, modelOver = null, balance = null;
 
   if (fit) {
     const h = fit.teams.get(fx.home);
     const a = fit.teams.get(fx.away);
-    // A side with no matches in this division sits at the average until it
-    // has played some — better than refusing to price the fixture at all.
     const ha = h ? h.attack : 1, hd = h ? h.defence : 1;
     const aa = a ? a.attack : 1, ad = a ? a.defence : 1;
-    rated = Boolean(h && a);
 
     lh = fit.mu * ha * ad * fit.homeEdge;
     la = fit.mu * aa * hd;
     model = pBtts(lh, la);
     modelOver = pOver(lh, la, 2);
+    // How two-way the fixture is. 1 means both sides are expected to score
+    // equally; near 0 means one side is expected to do all the scoring.
+    balance = Math.min(lh, la) / Math.max(lh, la);
   }
 
   const market = marketOver25(fx);
-  const thin = homeForm.n < prefs.minMatches || awayForm.n < prefs.minMatches;
 
   return {
-    fx, home, away, homeForm, awayForm,
-    product, blend, model, lh, la, modelOver, market, rated, thin,
+    fx, home, away, blend, model, lh, la, modelOver, market, balance,
+    thin: homeForm.n < prefs.minMatches || awayForm.n < prefs.minMatches,
     calib: model !== null && market !== null ? modelOver - market : null,
   };
 }
@@ -702,35 +619,36 @@ function render() {
 
 function renderStrip(rows) {
   const fits = ratings();
-
-  const priced = rows.filter((r) => r.model !== null && r.model !== undefined);
+  const priced = rows.filter((r) => r.model != null);
   const avgModel = priced.length ? priced.reduce((a, r) => a + r.model, 0) / priced.length : null;
 
-  const calibs = rows.map((r) => r.calib).filter((c) => c !== null && c !== undefined);
+  const calibs = rows.map((r) => r.calib).filter((c) => c != null);
   const bias = calibs.length ? calibs.reduce((a, c) => a + c, 0) / calibs.length : null;
 
-  const edges = DIV_ORDER
-    .filter((d) => prefs.divisions.includes(d) && fits[d])
-    .map((d) => fits[d].homeEdge);
+  const edges = DIV_ORDER.filter((d) => prefs.divisions.includes(d) && fits[d]).map((d) => fits[d].homeEdge);
   const avgEdge = edges.length ? edges.reduce((a, e) => a + e, 0) / edges.length : null;
 
   const rated = DIV_ORDER
     .filter((d) => prefs.divisions.includes(d) && fits[d])
     .reduce((a, d) => a + fits[d].teams.size, 0);
 
-  document.getElementById('strip').innerHTML = `
-    <div class="stat"><b>${rows.length}</b><span>fixtures ahead</span></div>
-    <div class="stat"><b>${avgModel === null ? '—' : pct(avgModel)}</b><span>average model chance</span></div>
-    <div class="stat"><b>${avgEdge === null ? '—' : '×' + avgEdge.toFixed(2)}</b><span>home scoring edge</span></div>
-    <div class="stat"><b>${bias === null ? '—' : (bias >= 0 ? '+' : '') + (bias * 100).toFixed(1) + 'pt'}</b><span>model vs market on over 2.5</span></div>
-    <div class="stat"><b>${rated}</b><span>teams rated</span></div>`;
+  document.getElementById('strip').innerHTML =
+    stat(rows.length, 'fixtures ahead') +
+    stat(avgModel == null ? '—' : pct(avgModel), 'average model chance') +
+    stat(avgEdge == null ? '—' : '×' + avgEdge.toFixed(2), 'home scoring edge') +
+    stat(bias == null ? '—' : (bias >= 0 ? '+' : '') + (bias * 100).toFixed(1) + 'pt', 'model vs market on over 2.5') +
+    stat(rated, 'teams rated');
+}
+
+function stat(value, label) {
+  return '<div class="stat"><b>' + value + '</b><span>' + label + '</span></div>';
 }
 
 function renderFixtures(rows) {
   const view = document.getElementById('fixturesView');
 
   if (!rows.length) {
-    view.innerHTML = `<div class="empty">No upcoming fixtures in the selected divisions. The source file fills up as the weekend approaches.</div>`;
+    view.innerHTML = '<div class="empty">No upcoming fixtures in the selected divisions. The source file fills up as the weekend approaches.</div>';
     return;
   }
 
@@ -744,18 +662,23 @@ function renderFixtures(rows) {
       byDay.get(r.fx.date).push(r);
     }
     for (const [date, group] of byDay) {
-      html += `<section class="daygroup"><h2>${escapeHtml(longDate(date))}</h2>${group.map(fixtureRow).join('')}</section>`;
+      html += board(longDate(date), group);
     }
   } else {
     const heading = {
       model: 'Ranked by the model',
-      product: 'Ranked by scoring rate',
+      balance: 'Ranked by how two-way the fixture is',
       blend: 'Ranked by how often both teams have scored',
     }[prefs.sort];
-    html = `<section class="daygroup"><h2>${heading}</h2>${sorted.map(fixtureRow).join('')}</section>`;
+    html = board(heading, sorted);
   }
 
   view.innerHTML = html;
+}
+
+function board(title, group) {
+  return '<section class="board"><div class="boardhead"><span>' + escapeHtml(title)
+    + '</span><span>expected goals</span></div>' + group.map(fixtureRow).join('') + '</section>';
 }
 
 function compareRows(a, b) {
@@ -763,61 +686,60 @@ function compareRows(a, b) {
     if (a.fx.date !== b.fx.date) return a.fx.date < b.fx.date ? -1 : 1;
     return (a.fx.time || '').localeCompare(b.fx.time || '');
   }
-  const key = prefs.sort === 'blend' ? 'blend' : prefs.sort === 'product' ? 'product' : 'model';
-  const av = a[key] === null || a[key] === undefined ? -1 : a[key];
-  const bv = b[key] === null || b[key] === undefined ? -1 : b[key];
+  const key = prefs.sort === 'blend' ? 'blend' : prefs.sort === 'balance' ? 'balance' : 'model';
+  const av = a[key] == null ? -1 : a[key];
+  const bv = b[key] == null ? -1 : b[key];
   return bv - av;
+}
+
+// Lit marks are matches the team scored in, newest on the right.
+function formMarks(team) {
+  const recent = team.matches.slice(0, FORM_MARKS).reverse();
+  return '<div class="form">' + recent.map((m) =>
+    '<i class="' + (m.gf > 0 ? 'on' : '') + '"></i>').join('') + '</div>';
+}
+
+// Bars read outward from a centre line, so a balanced fixture is symmetrical
+// and a mismatch is visibly lopsided.
+function goalBars(r) {
+  if (r.lh == null) return '<div class="bars"></div>';
+
+  const colour = r.balance > 0.62 ? 'var(--balanced)' : 'var(--lopsided)';
+  const wl = Math.min(100, (r.lh / BAR_MAX) * 100);
+  const wr = Math.min(100, (r.la / BAR_MAX) * 100);
+
+  return '<div class="bars">'
+    + '<div class="side l"><span class="b" style="width:' + wl.toFixed(1) + '%;background:' + colour + '"></span></div>'
+    + '<span class="axis"></span>'
+    + '<div class="side r"><span class="b" style="width:' + wr.toFixed(1) + '%;background:' + colour + '"></span></div>'
+    + '</div>'
+    + '<div class="lambdas"><span>' + r.lh.toFixed(2) + '</span><span>' + r.la.toFixed(2) + '</span></div>';
 }
 
 function fixtureRow(r) {
   const fx = r.fx;
 
   if (r.unmatched) {
-    return `<article class="fixture">
-      <div class="prob" style="border-left-color: var(--line)">—<small>no data</small></div>
-      <div class="teams">
-        <div class="team home"><b>${escapeHtml(fx.home)}</b><span>${DIV_SHORT[fx.div] || fx.div}</span></div>
-        <div class="vee">v</div>
-        <div class="team away"><b>${escapeHtml(fx.away)}</b><span>${shortDate(fx.date)}</span></div>
-      </div>
-      <div class="detail"><div><b>?</b><span>${escapeHtml(r.unmatched.join(', '))} not in results</span></div></div>
-    </article>`;
+    return '<article class="fixture"><div class="pcell"><b>—</b><span>no data</span></div>'
+      + '<div><div class="names">' + escapeHtml(fx.home) + ' <em>v</em> ' + escapeHtml(fx.away) + '</div></div>'
+      + '<div class="barcell"><div class="meta">' + escapeHtml(r.unmatched.join(', ')) + ' not in results</div></div></article>';
   }
 
-  const headline = prefs.sort === 'blend' ? r.blend : prefs.sort === 'product' ? r.product : r.model;
+  const headline = prefs.sort === 'blend' ? r.blend : prefs.sort === 'balance' ? r.balance : r.model;
   const headlineLabel = prefs.sort === 'blend' ? 'past BTTS'
-    : prefs.sort === 'product' ? 'scoring rate' : 'both score';
+    : prefs.sort === 'balance' ? 'balance' : 'both score';
 
-  return `<article class="fixture">
-    <div class="prob" style="border-left-color:${scaleColour(headline)}">
-      ${pct(headline)}
-      <small>${headlineLabel}</small>
-    </div>
-    <div class="teams">
-      <div class="team home">
-        <b>${escapeHtml(fx.home)}${r.home.moved ? '<span class="flag">moved</span>' : ''}</b>
-        <span>${ratingLine(fx.div, fx.home)}</span>
-      </div>
-      <div class="vee">v</div>
-      <div class="team away">
-        <b>${r.away.moved ? '<span class="flag">moved</span>' : ''}${escapeHtml(fx.away)}</b>
-        <span>${ratingLine(fx.div, fx.away)}</span>
-      </div>
-    </div>
-    <div class="detail">
-      <div><b>${r.lh === null ? '—' : r.lh.toFixed(2) + ' – ' + r.la.toFixed(2)}</b><span>goals expected</span></div>
-      <div><b>${pct(r.blend)}</b><span>past BTTS</span></div>
-      <div><b>${r.modelOver === null ? '—' : pct(r.modelOver)}${r.market === null ? '' : ' / ' + pct(r.market)}</b><span>over 2.5 model / market</span></div>
-      <div><b>${shortDate(fx.date)}${fx.time ? ' ' + fx.time : ''}</b><span>${DIV_SHORT[fx.div] || fx.div}${r.thin ? ' · thin' : ''}</span></div>
-    </div>
-  </article>`;
-}
+  const meta = shortDate(fx.date) + (fx.time ? ' ' + fx.time : '') + ' · ' + (DIV_SHORT[fx.div] || fx.div)
+    + (r.market != null ? ' · o2.5 ' + pct(r.modelOver) + '/' + pct(r.market) : '')
+    + (r.thin ? ' · thin' : '');
 
-function ratingLine(div, name) {
-  const fit = ratings()[div];
-  const t = fit && fit.teams.get(name);
-  if (!t) return 'no matches in this division';
-  return `attack ${t.attack.toFixed(2)} · defence ${t.defence.toFixed(2)} · ${t.played} games`;
+  return '<article class="fixture">'
+    + '<div class="pcell"><b>' + pct(headline) + '</b><span>' + headlineLabel + '</span></div>'
+    + '<div><div class="names">' + escapeHtml(fx.home) + (r.home.moved ? '<span class="flag">moved</span>' : '')
+      + ' <em>v</em> ' + escapeHtml(fx.away) + (r.away.moved ? '<span class="flag">moved</span>' : '') + '</div>'
+      + '<div class="forms">' + formMarks(r.home) + formMarks(r.away) + '</div></div>'
+    + '<div class="barcell">' + goalBars(r) + '<div class="meta">' + escapeHtml(meta) + '</div></div>'
+    + '</article>';
 }
 
 let teamSort = { key: 'goals', dir: -1 };
@@ -858,23 +780,16 @@ function renderTeams() {
     ['concedes', 'Lets in'], ['goals', 'Goals in its games'],
   ];
 
-  document.getElementById('teamsView').innerHTML = `
-    <table>
-      <thead><tr>${cols.map(([k, l]) => `<th data-key="${k}">${l}</th>`).join('')}</tr></thead>
-      <tbody>
-        ${rows.map((r) => `<tr>
-          <td>${escapeHtml(r.name)}${r.moved ? '<span class="flag">moved</span>' : ''}</td>
-          <td>${DIV_SHORT[r.div]}</td>
-          <td>${r.played}</td>
-          <td>${r.attack.toFixed(2)}</td>
-          <td>${r.defence.toFixed(2)}</td>
-          <td>${r.scoresHome.toFixed(2)}</td>
-          <td>${r.scoresAway.toFixed(2)}</td>
-          <td>${r.concedes.toFixed(2)}</td>
-          <td>${r.goals.toFixed(2)}</td>
-        </tr>`).join('')}
-      </tbody>
-    </table>`;
+  document.getElementById('teamsView').innerHTML =
+    '<table><thead><tr>' + cols.map((c) => '<th data-key="' + c[0] + '">' + c[1] + '</th>').join('')
+    + '</tr></thead><tbody>'
+    + rows.map((r) => '<tr>'
+      + '<td>' + escapeHtml(r.name) + (r.moved ? '<span class="flag">moved</span>' : '') + '</td>'
+      + '<td>' + DIV_SHORT[r.div] + '</td><td>' + r.played + '</td>'
+      + '<td>' + r.attack.toFixed(2) + '</td><td>' + r.defence.toFixed(2) + '</td>'
+      + '<td>' + r.scoresHome.toFixed(2) + '</td><td>' + r.scoresAway.toFixed(2) + '</td>'
+      + '<td>' + r.concedes.toFixed(2) + '</td><td>' + r.goals.toFixed(2) + '</td></tr>').join('')
+    + '</tbody></table>';
 
   document.querySelectorAll('#teamsView th').forEach((th) => {
     th.addEventListener('click', () => {
@@ -893,7 +808,7 @@ function renderTeams() {
 
 function buildDivControl() {
   const el = document.getElementById('divControl');
-  el.innerHTML = DIV_ORDER.map((d) => `<button type="button" data-div="${d}">${DIV_SHORT[d]}</button>`).join('');
+  el.innerHTML = DIV_ORDER.map((d) => '<button type="button" data-div="' + d + '">' + DIV_SHORT[d] + '</button>').join('');
   el.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
@@ -921,9 +836,9 @@ function syncControls() {
     b.setAttribute('aria-pressed', prefs.divisions.includes(b.dataset.div));
   });
   [['windowControl', 'window'], ['decayControl', 'decay'], ['sortControl', 'sort'], ['viewControl', 'view']]
-    .forEach(([id, key]) => {
-      document.querySelectorAll(`#${id} button`).forEach((b) => {
-        b.setAttribute('aria-pressed', b.dataset[key] === prefs[key]);
+    .forEach((pair) => {
+      document.querySelectorAll('#' + pair[0] + ' button').forEach((b) => {
+        b.setAttribute('aria-pressed', b.dataset[pair[1]] === prefs[pair[1]]);
       });
     });
 }
@@ -932,16 +847,7 @@ function syncControls() {
 // Formatting
 // ---------------------------------------------------------------------------
 
-function pct(v) {
-  return v === null || v === undefined ? '—' : Math.round(v * 100) + '%';
-}
-
-function scaleColour(v) {
-  if (v === null || v === undefined) return 'var(--line)';
-  const t = Math.max(0, Math.min(1, (v - 0.35) / 0.35));
-  const from = [158, 74, 52], to = [47, 107, 79];
-  return `rgb(${from.map((c, i) => Math.round(c + (to[i] - c) * t)).join(',')})`;
-}
+function pct(v) { return v == null ? '—' : Math.round(v * 100) + '%'; }
 
 function longDate(iso) {
   return new Date(iso + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
